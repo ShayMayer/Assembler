@@ -6,7 +6,7 @@
 memory_cell *create_memory_table() {
     memory_cell *table = (memory_cell *) calloc(1, sizeof(memory_cell)); /* the new memory table */
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if (table == NULL) {
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
@@ -21,12 +21,12 @@ void add_memory_cells(memory_cell *table, int cell_amount, long value) {
     memory_cell *current = table; /* a pointer to the given table */
     int i;
 
-	/* reaching the end of the list */
+    /* reaching the end of the list */
     while (current->next != NULL) {
         current = current->next;
     }
 
-	/* adding new cell amount the the given memory table */
+    /* adding new cell amount the the given memory table */
     for (i = 0; i < cell_amount; i++) {
         new_node = (memory_cell *) calloc(1, sizeof(memory_cell));
 
@@ -48,7 +48,7 @@ void add_memory_cells(memory_cell *table, int cell_amount, long value) {
 void free_memory_table(memory_cell *table) {
     memory_cell *current; /* a pointer to the given table */
 
-	/* iterating through the table and freeing its elements */
+    /* iterating through the table and freeing its elements */
     while (table != NULL) {
         current = table; /* makes the variable points to the given memory table */
         table = table->next; /* moving to the next element */
