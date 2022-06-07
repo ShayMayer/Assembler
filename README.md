@@ -1,2 +1,2 @@
 # Assembler
-assembler of mips(partial instruction set) 
+mips assembler(partial instruction set) 
