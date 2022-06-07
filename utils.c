@@ -22,11 +22,11 @@ bool extension_of_as(char *file_name) {
     int i;
     int j;
 
-	/* if the condition is TRUE than it means the string is too short */
+    /* if the condition is TRUE than it means the string is too short */
     if (strlen(file_name) <= 3)
         return FALSE;
 
-	/* starting from the end of the string and comparing to the as extension */
+    /* starting from the end of the string and comparing to the as extension */
     for (i = strlen(file_name) - 1, j = 2; j >= 0; i--, j--)
         if (file_name[i] != extension[j]) /* means the string has an invalid extension */
             return FALSE;
@@ -58,7 +58,7 @@ char* get_clear_file_name(char* file_name_with_extension){
         exit(1);
     }
 
-	/* decrementing the ending index until we see a dot(we actually look for the last dot in the string) */
+    /* decrementing the ending index until we see a dot(we actually look for the last dot in the string) */
     while (ending_index >= 0 && file_name_with_extension[ending_index] != '.')
         ending_index--;
 
@@ -76,10 +76,10 @@ char* get_clear_file_name(char* file_name_with_extension){
 }
 
 /* this function takes a file name without any extension and adds to it the given extension */
-char* add_extension_to_file(char* clear_file_name, char* extension){
+    char* add_extension_to_file(char* clear_file_name, char* extension){
     char* file_name = (char*)(malloc((strlen(clear_file_name) + strlen(extension) + 1)*(sizeof(char))));
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if(file_name == NULL){
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
@@ -124,7 +124,7 @@ register_format_error is_valid_register(char *expression){
     if(expression[i] == '+') /* a plus comes before the number is allowd */
         i++;
 
-	/* reading the number from the string */
+    /* reading the number from the string */
     for(; i < strlen(expression); i++){
 		/* the two lines bellow are responsible for readingthe next digit of the number */
         reg_value *= 10;
@@ -152,7 +152,7 @@ bool is_int(char *expression, int from){
 int get_label(char str[], char buf[], int i){
     int j = 0;
 
-	/* the reading of the label continues until we see a white space or we are at the end of the line */
+    /* the reading of the label continues until we see a white space or we are at the end of the line */
     while(!end_of_line(str, i) && !isspace(str[i])) { 
         buf[j] = str[i];
         i++;
@@ -169,7 +169,7 @@ int get_label(char str[], char buf[], int i){
 int get_label_until(char str[], char buf[], int i, char token){
     int j = 0;
 
-	/* the reading of the label continues until we see a white space or we see the given char(token), or we are at the end of the line */
+    /* the reading of the label continues until we see a white space or we see the given char(token), or we are at the end of the line */
     while(!end_of_line(str, i) && !isspace(str[i]) && str[i] != token) {  
         buf[j] = str[i];
         i++;
