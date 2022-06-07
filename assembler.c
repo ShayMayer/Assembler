@@ -12,7 +12,7 @@
 
 /* this function takes a file name and tries to assemble it */
 void assemble(char *file_name) {
-	int cur_char; /* the current char in the current line to be assembled */
+    int cur_char; /* the current char in the current line to be assembled */
     char cur_line[MAX_LINE_LENGTH] /* the current line to be assembled */, *clear_file_name; /* the file name without the extension */
     long ic = IC_INIT_VALUE /* instruction couter */, dc = 0 /* data couter */, icf /* final instruction couter */, dcf /* final instruction couter */;
     FILE *asm_file; /* the assembly file */
@@ -22,7 +22,7 @@ void assemble(char *file_name) {
     extern_node *extern_list; /* the list of externals labels */
     file_info cur_file_info; /* contains information about the current file */
 
-	/* checks if the given file name has a valid format */
+    /* checks if the given file name has a valid format */
     if (!extension_of_as(file_name)) {
         fprintf(stderr,"the format of %s is not correct(should be <file name>.as) \n", file_name);
         return;
@@ -30,7 +30,7 @@ void assemble(char *file_name) {
 
     asm_file = fopen(file_name, "r");
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if (asm_file == NULL) {
         fprintf(stderr, "can't open file: %s\n", file_name);
         return;
