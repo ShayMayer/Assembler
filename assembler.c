@@ -36,11 +36,11 @@ void assemble(char *file_name) {
         return;
     }
 
-	/* getting info about the file */
+    /* getting info about the file */
     cur_file_info.name = file_name;
     cur_file_info.cur_line_content = cur_line;
 
-	/* iterating through the lines of the assembler and checks if they are valid instructions */
+    /* iterating through the lines of the assembler and checks if they are valid instructions */
     for (cur_file_info.cur_line_number = 1; !feof(asm_file) && fgets(cur_line, MAX_LINE_LENGTH, asm_file) != NULL; cur_file_info.cur_line_number++) {
         if (strchr(cur_line, '\n') == NULL && !feof(asm_file)) { /* new line char not found, means line contains more chars than allowd */
             fprintf(stderr, "%s:%ld: line too long(contains more than 80 chars)\n", file_name, cur_file_info.cur_line_number);
@@ -81,12 +81,12 @@ void assemble(char *file_name) {
             tmp = tmp->next;
         }
 
-		/* pointing to the start of file, in order to start the second pass */
+	/* pointing to the start of file, in order to start the second pass */
         rewind(asm_file);
 
         ic = IC_INIT_VALUE; /* reseting the value of data counter, will be used again */
 		
-		/* iterating through the lines and trying to assemble them */
+	/* iterating through the lines and trying to assemble them */
         for (cur_file_info.cur_line_number = 1; !feof(asm_file) && fgets(cur_line, MAX_LINE_LENGTH, asm_file) != NULL; cur_file_info.cur_line_number++) {
             if(!assemble_command(cur_file_info, ic_memory_table, dc_memory_table, s_table, extern_list, &ic, &dc)) { /* means assembling has failed */
                 if (is_success)
@@ -95,27 +95,27 @@ void assemble(char *file_name) {
         }
 
         if(is_success) {
-			/* getting the name of the file(with out the extension) */
+	    /* getting the name of the file(with out the extension) */
             clear_file_name = get_clear_file_name(cur_file_info.name);
 
-			/* checking if memory tables are empty so we could know if we should write anything to the output files */
+	    /* checking if memory tables are empty so we could know if we should write anything to the output files */
             if(ic_memory_table->next != NULL || dc_memory_table->next != NULL) write_object_file(clear_file_name, ic_memory_table, dc_memory_table, icf, dcf);
             else write_blank_object_file(clear_file_name);
 
-			/* getting all the labels which are entrys */
+	    /* getting all the labels which are entrys */
             entry_table = table_of_attributes(s_table, ENTRY_SYMBOL);
-			/* checking if entry table is empty so we could know if we should write anything to the output files */
+	    /* checking if entry table is empty so we could know if we should write anything to the output files */
             if(entry_table->next != NULL) write_entry_file(clear_file_name, entry_table);
 
-			/* checking if the list of externals is empty so we could know if we should write anything to the output files */
+	    /* checking if the list of externals is empty so we could know if we should write anything to the output files */
             if(extern_list->next != NULL) write_extern_file(clear_file_name, extern_list);
 
-			/* freeing the variables */
+	    /* freeing the variables */
             free_symbol_table(entry_table);
             free(clear_file_name);
         }
 
-	    /* freeing the variables */
+	/* freeing the variables */
         free_memory_table(ic_memory_table);
         free_memory_table(dc_memory_table);
         free_extern_list(extern_list);
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
     if(argc == 1) /* means no file names are provided */
         fprintf(stderr, "you didn't provide enough files(less than 1)");
 
-	/* passing the assembler the command line arguments */
+    /* passing the assembler the command line arguments */
     for(i = 1; i < argc; i++)
         assemble(argv[i]); 
 
