@@ -147,13 +147,13 @@ static bool assemble_r_instruction(file_info f_info, int i, opcode op, funct f, 
     int args_handled = 0; /* how many operands we saw */
     char expression[MAX_LINE_LENGTH]; /* buffer contaning operand as a string */
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if(operands == NULL){
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-	/* getting the operands one by one */
+    /* getting the operands one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
         i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
         i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
@@ -170,7 +170,7 @@ static bool assemble_r_instruction(file_info f_info, int i, opcode op, funct f, 
     if(expected_args == 2) build_r_instruction(ic_memory_table, op, f, operands[0], 0, operands[1]); /* converting the r instruction(copying) to machine code */
     else if(expected_args == 3) build_r_instruction(ic_memory_table, op, f, operands[0], operands[1], operands[2]); /* converting the r instruction(arithmetic and logic) to machine code */
 
-	/* freeing allocated variables */
+    /* freeing allocated variables */
     free(operands);
 
     *ic += 4; /* an instruction of 4 cells */
@@ -181,7 +181,7 @@ static bool assemble_r_instruction(file_info f_info, int i, opcode op, funct f, 
 static void build_r_instruction(memory_cell *ic_memory_table, opcode op, int funct, int rs, int rt, int rd){
     long value = 0; /* represents the instruction machine code */
 
-	/* in the lines bellow we convert the instruction to machine code(stores the machine code on a variable until final conversion) */
+    /* in the lines bellow we convert the instruction to machine code(stores the machine code on a variable until final conversion) */
     value |= op; 
     value = ((value << 5) | (rs & 31)); /* saving 5 LSB */
     value = ((value << 5) | (rt & 31)); /* saving 5 LSB */
@@ -204,13 +204,13 @@ static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, m
     long immed; /* the distance between the current memory location to the label location in memory */
     int args_handled = 0; /* how many operands we saw */
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if(registers == NULL){
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-	/* getting the operands one by one */
+    /* getting the operands one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
         i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
         i = get_label_until(f_info.cur_line_content, label, i, ','); /* getting all the chars until we see a ',' */
@@ -240,7 +240,7 @@ static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, m
 
     build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converting the instruction to machine code */
 
-	/* freeing allocated variables */
+    /* freeing allocated variables */
     free(registers);
 
     *ic += 4; /* an instruction of 4 cells */
@@ -254,19 +254,19 @@ static bool assemble_i_instruction_group_3(file_info f_info, int i, opcode op, m
 
 /* this function takes i instruction(that does not have label) and tries to assemble it */
 static bool assemble_i_instruction_no_label(file_info f_info, int i, opcode op, memory_cell *ic_memory_table, long *ic) {
-	int *registers = (int *) malloc(sizeof(int) * 2); /* the registers of the instruction */
+    int *registers = (int *) malloc(sizeof(int) * 2); /* the registers of the instruction */
     int registers_handled = 0; /* how many registers we saw */
     int args_handled = 0; /* how many operands we saw */
     long immed; /* the literal in the instruction(second operand) */
     char expression[MAX_LINE_LENGTH]; /* buffer contaning operand as a string */
 
-	/* checking if the malloc function worked */
+    /* checking if the malloc function worked */
     if (registers == NULL) {
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-	/* getting the operands one by one */
+    /* getting the operands one by one */
     while (!end_of_line(f_info.cur_line_content, i)) {
         i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
         i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
@@ -286,7 +286,7 @@ static bool assemble_i_instruction_no_label(file_info f_info, int i, opcode op, 
 
     build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converting the instruction to machine code */
 
-	/* freeing allocated variables */
+    /* freeing allocated variables */
     free(registers); 
 
     *ic += 4; /* an instruction of 4 cells */
@@ -403,7 +403,7 @@ static bool assemble_dw_instruction(file_info f_info, int i, memory_cell *dc_mem
 static bool assemble_num_creation_instruction(file_info f_info, int i, memory_cell *dc_memory_table, long *dc, int cells_amount){
     char num[MAX_LINE_LENGTH]; /* buffer contaning the number as a string */
 
-	/* getting the numbers one by one */
+    /* getting the numbers one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
         i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
         i = get_label_until(f_info.cur_line_content, num, i, ','); /* getting all the chars until we see a ',' */
@@ -422,14 +422,14 @@ static bool assemble_num_creation_instruction(file_info f_info, int i, memory_ce
 static bool assemble_asciz_instruction(file_info f_info, int i, memory_cell *dc_memory_table, long *dc){
     int end_index = strlen(f_info.cur_line_content) - 1; /* index points to the end of the line */
 
-	/* decrementing the index until we see a quote */
+    /* decrementing the index until we see a quote */
     while(end_index >= 0 && isspace(f_info.cur_line_content[end_index]))
         end_index--;
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
     i++; /* we saw a quote and we move on to the next char in order to read the content between the quotes */
 
-	/* reading the content between the quotes */
+    /* reading the content between the quotes */
     for(; i < end_index; i++){
         add_memory_cells(dc_memory_table, 1, f_info.cur_line_content[i]); /* adding the char to the memory */
         *dc += 1; /* a char takes one cell in memory */
