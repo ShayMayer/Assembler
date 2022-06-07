@@ -55,7 +55,7 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
 
 /* this function takes a line and validates it */
 bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc){
-   	char label[MAX_LINE_LENGTH] /* the label in the beginning of the instruction */, instruction[MAX_LINE_LENGTH]; /* the instruction */
+    char label[MAX_LINE_LENGTH] /* the label in the beginning of the instruction */, instruction[MAX_LINE_LENGTH]; /* the instruction */
     int i = 0; /* index for given the line */
     bool label_found = FALSE; /* says if we saw a label or not */
     instruction_info *instruct_info; /* information about the instruction */
@@ -227,7 +227,7 @@ static int find_and_validate_label(file_info f_info, int i, char *label, symbol_
         return -1;
     }
 
-	/* checking if the name of the label is a keyword */
+    /* checking if the name of the label is a keyword */
     if(get_instruction_info(label) != NULL) {
         fprintf(stderr, "%s:%ld: label can't have the same name as an instruction\n", f_info.name, f_info.cur_line_number);
         return -1;
@@ -265,7 +265,7 @@ static bool validate_r_command(file_info f_info, int i, long *ic, int args_amoun
         return FALSE;
     }
 
-	/* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
+    /* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
     while (!end_of_line(f_info.cur_line_content, i)) {
         comma_detected = FALSE; /* starting again, validating a new operand */
 
@@ -274,7 +274,7 @@ static bool validate_r_command(file_info f_info, int i, long *ic, int args_amoun
             return FALSE;
         }
 
-		/* first 3 operands should be registers, the others are just for amount handling */
+	/* first 3 operands should be registers, the others are just for amount handling */
         if (args_amount < args_amount_expected) {
 
             i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
@@ -349,13 +349,13 @@ static bool validate_i_instruction_group_2(file_info f_info, int i, long *ic){
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
+    /* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -441,13 +441,13 @@ static bool validate_i_instruction_no_label(file_info f_info, int i, long *ic){
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
+    /* getting the operands one by one and validates them, in addition it validates the syntax, if it sees more operands then it counts them */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -523,13 +523,13 @@ static bool validate_jmp_instruction(file_info f_info, int i, long *ic){
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operand validates it, in addition it validates the syntax, if it sees more operands then it counts them */
+    /* getting the operand and validates it, in addition it validates the syntax, if it sees more operands then it counts them */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -614,13 +614,13 @@ static bool validate_stop_instruction(file_info f_info, int i, long *ic) {
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 	
-	/* validates the instruction, if it sees more operands then it counts them */
+    /* validates the instruction, if it sees more operands then it counts them */
     while (!end_of_line(f_info.cur_line_content, i)) {
         comma_detected = FALSE;
 
@@ -668,13 +668,13 @@ static bool validate_j_instruction_label_only(file_info f_info, int i, long *ic)
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operand validates it, in addition it validates the syntax */
+    /* getting the operand and validates it, in addition it validates the syntax */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -752,13 +752,13 @@ static bool validate_num_creation_instruction(file_info f_info, int i, long *dc,
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operands one by one and validates them, in addition it validates the syntax */
+    /* getting the operands one by one and validating them, in addition it validates the syntax */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -808,7 +808,7 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') { 
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
@@ -854,13 +854,13 @@ static bool validate_entry_instruction(file_info f_info, int i){
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operand validates it, in addition it validates the syntax */
+    /* getting the operand and validates it, in addition it validates the syntax */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
@@ -926,13 +926,13 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
 
-	/* unexpected comma before operand detected */
+    /* unexpected comma before operand detected */
     if (f_info.cur_line_content[i] == ',') {
         fprintf(stderr, "%s:%ld: unexpected comma before operand\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
 
-	/* getting the operand validates it, in addition it validates the syntax */
+    /* getting the operand and validates it, in addition it validates the syntax */
     while(!end_of_line(f_info.cur_line_content, i)){
         comma_detected = FALSE;
 
