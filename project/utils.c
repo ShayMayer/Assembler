@@ -49,7 +49,7 @@ bool end_of_line(char *line, int i){
 
 /* this function takes a file name with extension and returns the clear name(without the extension) */
 char* get_clear_file_name(char* file_name_with_extension){
-	char *clear_file_name = (char *) (malloc((strlen(file_name_with_extension) - 2) * (sizeof(char))));
+    char *clear_file_name = (char *) (malloc((strlen(file_name_with_extension) - 2) * (sizeof(char))));
     int i = 0, ending_index = strlen(file_name_with_extension) - 1;
 
     /* checking if the malloc function worked */
