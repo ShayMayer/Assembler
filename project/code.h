@@ -11,7 +11,7 @@ typedef enum instruction_type {
     R_INSTRUCTION = 0, /* an insturction that has an opcode */
     I_INSTRUCTION, /* data instruction */
     J_INSTRUCTION, /* .entry instruction */
- 	DB_INSTRUCTION, /*.db instruction */
+    DB_INSTRUCTION, /*.db instruction */
     DH_INSTRUCTION, /*.dh instruction */
     DW_INSTRUCTION, /*.dw instruction */
     ASCIZ_INSTRUCTION, /* asciz instruction */
