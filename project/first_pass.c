@@ -78,99 +78,99 @@ bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc)
 	/* checking which instruction the given instruction is */
 	if(instruct_info != NULL) {
 		switch(instruct_info->id){		
-			case ADD: 
+		    case ADD: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_1(f_info, i, ic);
+					return validate_r_instruction_group_1(f_info, i, ic);
 			case SUB:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_1(f_info, i, ic);
+					return validate_r_instruction_group_1(f_info, i, ic);
 			case AND:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_1(f_info, i, ic);
+					return validate_r_instruction_group_1(f_info, i, ic);
 			case OR:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_1(f_info, i, ic);
+					return validate_r_instruction_group_1(f_info, i, ic);
 			case NOR: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_1(f_info, i, ic);
+					return validate_r_instruction_group_1(f_info, i, ic);
 			case MOVE: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_2(f_info, i, ic); 
+					return validate_r_instruction_group_2(f_info, i, ic); 
 			case MVHI: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_2(f_info, i, ic); 
+						return validate_r_instruction_group_2(f_info, i, ic); 
 			case MVLO:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_r_instruction_group_2(f_info, i, ic); 
+					return validate_r_instruction_group_2(f_info, i, ic); 
 			case ADDI:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_1(f_info, i, ic);
+					return validate_i_instruction_group_1(f_info, i, ic);
 			case SUBI: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_1(f_info, i, ic);
+					return validate_i_instruction_group_1(f_info, i, ic);
 			case ANDI: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_1(f_info, i, ic);
+					return validate_i_instruction_group_1(f_info, i, ic);
 			case ORI:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_1(f_info, i, ic);
+					return validate_i_instruction_group_1(f_info, i, ic);
 			case NORI:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_1(f_info, i, ic);
+					return validate_i_instruction_group_1(f_info, i, ic);
 			case BNE: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_2(f_info, i, ic);
+					return validate_i_instruction_group_2(f_info, i, ic);
 			case BEQ:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_2(f_info, i, ic);
+					return validate_i_instruction_group_2(f_info, i, ic);
 			case BLT:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			 
-				return validate_i_instruction_group_2(f_info, i, ic);
+					return validate_i_instruction_group_2(f_info, i, ic);
 			case BGT: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_2(f_info, i, ic);
+					return validate_i_instruction_group_2(f_info, i, ic);
 			case LB: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case SB:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			 
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case LW:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			 
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case SW: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case LH:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case SH:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_i_instruction_group_3(f_info, i, ic);
+					return validate_i_instruction_group_3(f_info, i, ic);
 			case JMP:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_jmp_instruction(f_info, i, ic);
+					return validate_jmp_instruction(f_info, i, ic);
 			case LA:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_la_instruction(f_info, i, ic);
+					return validate_la_instruction(f_info, i, ic);
 			case CALL:
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_call_instruction(f_info, i, ic);
+					return validate_call_instruction(f_info, i, ic);
 			case STOP: 
 				if(label_found == TRUE) add_symbol_item(table, label, *ic, CODE_SYMBOL);			
-				return validate_stop_instruction(f_info, i, ic);
+					return validate_stop_instruction(f_info, i, ic);
 			case DB:
 				if(label_found == TRUE) add_symbol_item(table, label, *dc, DATA_SYMBOL); 
-				return validate_db_instruction(f_info, i, dc);
+					return validate_db_instruction(f_info, i, dc);
 			case DH:
 				if(label_found == TRUE) add_symbol_item(table, label, *dc, DATA_SYMBOL);
-				return validate_dh_instruction(f_info, i, dc);
+					return validate_dh_instruction(f_info, i, dc);
 			case DW:
 				if(label_found == TRUE) add_symbol_item(table, label, *dc, DATA_SYMBOL);
-				return validate_dw_instruction(f_info, i, dc);
+					return validate_dw_instruction(f_info, i, dc);
 			case ASCIZ:
 				if(label_found == TRUE) add_symbol_item(table, label, *dc, DATA_SYMBOL);
-				return validate_asciz_instruction(f_info, i, dc);
+					return validate_asciz_instruction(f_info, i, dc);
 			case ENTRY: 
 				if(label_found == TRUE){ /* label before entry instruction is not allowd */
 					fprintf(stderr, "%s:%ld: label can't be defined in entry instruction\n", f_info.name, f_info.cur_line_number);
