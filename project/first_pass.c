@@ -233,7 +233,7 @@ static int find_and_validate_label(file_info f_info, int i, char *label, symbol_
         return -1;
     }
 
-    if(exists(table, label, CODE_SYMBOL | DATA_SYMBOL)){ /* means the label has already been define(only one definition is allowed) */
+    if(exists(table, label, CODE_SYMBOL | DATA_SYMBOL)){ /* means the label has already been defined(only one definition is allowed) */
         fprintf(stderr, "%s:%ld: the label \"%s\" already exists\n", f_info.name, f_info.cur_line_number, label);
         return -1;
     }
