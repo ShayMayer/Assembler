@@ -90,14 +90,14 @@ char* get_clear_file_name(char* file_name_with_extension){
     return file_name;
 }
 
-/* this function incrementing the given counter until we see a char which is not a white space */
+/* this function increments the given counter until it detects a char which is not a white space */
 int skip_spaces(char *str, int i){
     while(!end_of_line(str, i) && isspace(str[i]))
         i++;
     return i;
 }
 
-/* this function takes an expression and convert it to long */
+/* this function takes an expression and converts it to long */
 long get_num(char *expression){
     char *temp_ptr;
     long value = strtol(expression, &temp_ptr, 10);
