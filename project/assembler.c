@@ -55,7 +55,7 @@ void assemble(char *file_name) {
                     is_success = FALSE;
             }
 
-            if(((ic - 100) + dc) > MEMORY_SIZE) { /* means we the instructions require more space than the computer has */
+            if(((ic - 100) + dc) > MEMORY_SIZE) { /* means the instructions require more space than the computer has */
                 fprintf(stderr, "%s:%ld: not enough memory in the processor\n", file_name, cur_file_info.cur_line_number);
                 return;
             }
