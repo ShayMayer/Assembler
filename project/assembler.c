@@ -70,7 +70,7 @@ void assemble(char *file_name) {
         ic_memory_table->cell = 0; /* first element is a garbage value */
         dc_memory_table = create_memory_table(); /* creating the data memory table */
         ic_memory_table->cell = 0; /* first element is a garbage value */
-        extern_list = create_extern_list(); /* creating the list of externals */
+        extern_list = create_extern_list(); /* creating a list of externals */
 
         dc = 0; /* reseting the value of data counter, will be used again */
 
