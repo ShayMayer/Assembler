@@ -4,20 +4,7 @@
 
 #include "utils.h"
 
-#define INSTRUCTIONS_AMOUNT 33
-
-/* this enum contains the types of all the instrucions */
-typedef enum instruction_type {
-    R_INSTRUCTION = 0, /* an insturction that has an opcode */
-    I_INSTRUCTION, /* data instruction */
-    J_INSTRUCTION, /* .entry instruction */
-    DB_INSTRUCTION, /*.db instruction */
-    DH_INSTRUCTION, /*.dh instruction */
-    DW_INSTRUCTION, /*.dw instruction */
-    ASCIZ_INSTRUCTION, /* asciz instruction */
-    EXTERN_INSTRUCTION, /* .extern instruction */
-    ENTRY_INSTRUCTION /* .extern instruction */	
-} instruction_type;
+#define INSTRUCTIONS_AMOUNT 33 /* amount of instructions the assembly language consists of */
 
 /* this enum conatians ids for each instruction */
 typedef enum instruction_id {
@@ -115,7 +102,6 @@ typedef struct instruction_info {
 	int id; /* id of the instruction */
 	int opcode; /* opcode of the instruction */
 	int funct; /* funct of the instruction */
-	int type; /* type of the instruction */
 } instruction_info;
 
 /* this function returns the info object which its name is identical to the given parameter */

@@ -463,5 +463,16 @@ static bool assemble_entry_instruction(file_info f_info, int i, symbol_table *s_
 }
 
 static bool assemble_extern_instruction(file_info f_info, int i, symbol_table *s_table) {
-	return TRUE;
+	char label[MAX_LINE_LENGTH];
+
+    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
+    get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
+
+
+    if (exists(s_table, label, ~EXTERNAL_SYMBOL)) { /* means the label is not external(therefore created in the source file itself) */
+        fprintf(stderr, "%s:%ld: label that created in file can't be external\n", f_info.name, f_info.cur_line_number);
+        return FALSE;
+    }
+
+    return TRUE; /* assembling succeeded */
 }
