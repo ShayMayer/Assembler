@@ -7,7 +7,7 @@
 #include "extern_list.h"
 
 /* this function creates an object file via the file_name parameter */
-void write_object_file(char *file_name , memory_cell *ic_memory_table, memory_cell *dc_memory_table, long icf, long dcf);
+void write_object_file(char *file_name , memory_table *ic_memory_table, memory_table *dc_memory_table, long icf, long dcf);
 
 /*
 	this function creates an empty "ob" file via the file_name parameter 
@@ -19,6 +19,6 @@ void write_blank_object_file(char *file_name);
 void write_entry_file(char *file_name, symbol_table *table);
 
 /* this function creates a file of externals via the file_name parameter */
-void write_extern_file(char *file_name, extern_node *list);
+void write_extern_file(char *file_name, extern_table *table);
 
 #endif

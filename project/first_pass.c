@@ -173,13 +173,13 @@ bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc)
 					return validate_asciz_instruction(f_info, i, dc);
 			case ENTRY: 
 				if(label_found == TRUE){ /* label before entry instruction is not allowd */
-					fprintf(stderr, "%s:%ld: label can't be defined in entry instruction\n", f_info.name, f_info.cur_line_number);
+					fprintf(stderr, "%s:%ld: the label \"%s\" can't be defined in entry instruction\n", f_info.name, f_info.cur_line_number, label);
 					return FALSE;
 				}
 				return validate_entry_instruction(f_info, i);
 			case EXTERN: 
 				if(label_found == TRUE){ /* label before extern instruction is not allowd */
-					fprintf(stderr, "%s:%ld: label can't be defined in extern instruction\n", f_info.name, f_info.cur_line_number);
+					fprintf(stderr, "%s:%ld: the label \"%s\" can't be defined in extern instruction\n", f_info.name, f_info.cur_line_number,label);
 					return FALSE;
 				}
 				return validate_extern_instruction(f_info, i, table);
@@ -229,7 +229,7 @@ static int find_and_validate_label(file_info f_info, int i, char *label, symbol_
 
     /* checking if the name of the label is a keyword */
     if(get_instruction_info(label) != NULL) {
-        fprintf(stderr, "%s:%ld: label can't have the same name as an instruction\n", f_info.name, f_info.cur_line_number);
+        fprintf(stderr, "%s:%ld: the label \"%s\" can't have the same name as an instruction\n", f_info.name, f_info.cur_line_number, label);
         return -1;
     }
 

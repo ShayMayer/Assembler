@@ -14,11 +14,16 @@ typedef enum symbol_types {
 } symbol_types;
 
 /* this struct represents a symbol table element */
-typedef struct symbol_table{
+typedef struct symbol_element {
     char *name; /* the name of the symbol */
     long address; /* the address of the symbol */
     unsigned int attributes: 4; /* the attributes of the symbol */
-    struct symbol_table *next; /* a pointer to the next element in the symbol table */
+    struct symbol_element *next; /* a pointer to the next element in the symbol table */
+} symbol_element;
+
+typedef struct symbol_table {
+	struct symbol_element *head;
+	struct symbol_element *tail;
 } symbol_table;
 
 /* this function creates an empty symbol table (contains a garbage value) */
@@ -44,5 +49,7 @@ long get_address_of(symbol_table *table, char *name);
 
 /* this function takes a symbol tables and frees its memory */
 void free_symbol_table(symbol_table *table);
+
+bool sym_is_empty(symbol_table *table);
 
 #endif

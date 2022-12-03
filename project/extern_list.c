@@ -5,45 +5,20 @@
 #include "extern_list.h"
 
 /* this function creates an empty list of externals (contains a garbage value) */
-extern_node *create_extern_list(){
-    extern_node *list = (extern_node *) calloc(1, sizeof(extern_node)); /* the new list to return */
+extern_table *create_extern_table(){
+    extern_table *table = (extern_table *) calloc(1, sizeof(extern_table)); /* the new list to return */
     /* checking if the calloc function worked */
-    if (list == NULL) {
+    if (table == NULL) {
         fprintf(stderr, "c language error: calloc failed");
         exit(1);
     }
-
-    list->name = (char *) calloc(1, sizeof(char *));
-    /* checking if the calloc function worked */
-    if (list->name == NULL) {
-        fprintf(stderr, "c language error: calloc failed");
-        exit(1);
-    }
-
-    /* setting the place */
-    list->place = 0;
-
-    return list;
+    return table;
 }
 
 /* this function adds a new element to a given list of externals via given details */
-void add_extern_item(extern_node *list, char *name, long place) {
-    extern_node *new_node /* the new element to add to the given list */, *current = list  /* a pointer to the given list */;
-    char *name_temp; /* a temporary string for assigning the given name to the new element */
-
-    new_node = (extern_node *) calloc(1, sizeof(extern_node));
-    /* checking if the calloc function worked */
-    if (new_node == NULL) {
-        fprintf(stderr, "c language error: calloc failed");
-        exit(1);
-    }
-
-    new_node->name = (char *) calloc(1, sizeof(char *));
-    /* checking if the calloc function worked */
-    if (new_node->name == NULL) {
-        fprintf(stderr, "c language error: calloc failed");
-        exit(1);
-    }
+void add_extern_element(extern_table *table, char *name, long place) {
+    extern_element *new_element; /* the new element to add to the given list */
+    char *name_temp = NULL; /* a temporary string for assigning the given name to the new element */   
 
     name_temp = (char *) malloc(strlen(name) + 1);
     /* checking if the malloc function worked */
@@ -53,30 +28,58 @@ void add_extern_item(extern_node *list, char *name, long place) {
     }
     strcpy(name_temp, name);
 
-    /* these 2 lines bellow are responsible for creating the new element */
-    new_node->name = name_temp;
-    new_node->place = place;
+	if(table->head == NULL) {
+		table->head = (extern_element *) calloc(1, sizeof(extern_element));
+		table->head->name = (char *) calloc(1, sizeof(char *));
+	    table->head->name = name_temp;
+		table->head->place = place;
 
-    /* reaching the end of the list */
-    while (current->next != NULL) {
-        current = current->next;
+		table->tail = table->head;
+		return;
+	}
+
+    new_element = (extern_element *) calloc(1, sizeof(extern_element));
+    /* checking if the calloc function worked */
+    if (new_element == NULL) {
+        fprintf(stderr, "c language error: calloc failed");
+        exit(1);
     }
 
-    /* adding the new element to the list */
-    current->next = new_node;
+	new_element->name = (char *) calloc(1, sizeof(char *));
+    /* checking if the calloc function worked */
+    if (new_element->name == NULL) {
+        fprintf(stderr, "c language error: calloc failed");
+        exit(1);
+    }
+
+    /* these 2 lines bellow are responsible for creating the new element */
+    new_element->name = name_temp;
+    new_element->place = place;
+
+	table->tail->next = new_element;
+	table->tail = table->tail->next;
 }
 
 /* this function takes a list of externals and frees its memory */
-void free_extern_list(extern_node *list) {
-    extern_node *current; /* a pointer to the given list */
+void free_extern_table(extern_table *table) {
+    extern_element *current; /* a pointer to the given list */
 
     /* iterating through the list and freeing its elements */
-    while (list != NULL) {
-        current = list;
-        list = list->next; /* moving to the next element */
+    while (table->head != NULL) {
+        current = table->head;
+        table->head = table->head->next; /* moving to the next element */
 
 	/* freeing the variables */
         free(current->name);
         free(current);
     }
+	free(table);
 }
+
+bool extern_is_empty (extern_table *table) {
+	return (table->head == NULL);
+}
+
+
+
+
