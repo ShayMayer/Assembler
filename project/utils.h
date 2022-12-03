@@ -45,6 +45,9 @@ int skip_spaces(char *str, int i);
 /* this function takes an expression and convert it to long */
 long get_num(char *expression);
 
+/* this function returns the value of a given register */
+int get_register(char *register_content);
+
 /* the function takes an expression if return TRUE if it's a valid register and FALSE otherwise */
 register_format_error is_valid_register(char *expression);
 

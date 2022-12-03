@@ -106,7 +106,5 @@ typedef struct instruction_info {
 
 /* this function returns the info object which its name is identical to the given parameter */
 instruction_info *get_instruction_info(char *name);
-/* this function returns the value of a given register */
-int get_register(char *register_content);
 
 #endif

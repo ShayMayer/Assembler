@@ -6,7 +6,7 @@
 instruction_info *get_instruction_info(char *name){
 	/* info about the instructions */
 	static instruction_info info[INSTRUCTIONS_AMOUNT] = {
-				{"add", ADD, ADD_OP, ADD_FUNCT},	
+		{"add", ADD, ADD_OP, ADD_FUNCT},	
 		{"sub", SUB, SUB_OP, SUB_FUNCT},
 		{"and", AND, AND_OP, AND_FUNCT},
 		{"or", OR, OR_OP, OR_FUNCT},
@@ -46,14 +46,4 @@ instruction_info *get_instruction_info(char *name){
 		if(strcmp(info[i].name, name) == 0)
 			return &info[i];
 	return NULL;
-}
-
-
-/* this function returns the value of a given register */
-int get_register(char *register_content) {
-    char reg_value[3]; /* the value of the given register, represented as a string */
-	reg_value[0] = register_content[1]; 
-	reg_value[1] = register_content[2]; 
-	reg_value[2] = '\0'; 
-    return atoi(reg_value); /* converting the string to a number and returns it */
 }
