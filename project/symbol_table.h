@@ -22,8 +22,8 @@ typedef struct symbol_element {
 } symbol_element;
 
 typedef struct symbol_table {
-	struct symbol_element *head;
-	struct symbol_element *tail;
+    struct symbol_element *head;
+    struct symbol_element *tail;
 } symbol_table;
 
 /* this function creates an empty symbol table (contains a garbage value) */

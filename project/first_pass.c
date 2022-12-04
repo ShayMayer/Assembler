@@ -229,7 +229,7 @@ static int find_and_validate_label(file_info f_info, int i, char *label, symbol_
 
     /* checking if the name of the label is a keyword */
     if(get_instruction_info(label) != NULL) {
-        fprintf(stderr, "%s:%ld: the label \"%s\" can't have the same name as an instruction\n", f_info.name, f_info.cur_line_number, label);
+        fprintf(stderr, "%s:%ld: the label \"%s\" can't have an instruction name\n", f_info.name, f_info.cur_line_number, label);
         return -1;
     }
 
@@ -276,25 +276,14 @@ static bool validate_r_command(file_info f_info, int i, long *ic, int args_amoun
 
 	/* first 3 operands should be registers, the others are just for amount handling */
         if (args_amount < args_amount_expected) {
-
             i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
 
             register_error = is_valid_register(expression); /* looking for errors of the register */
             if (register_error != REG_NONE) { /* means the register is not valid */
-                if (register_error == REG_DOLLAR_SIGN_NOT_FOUND)
-                    fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(\"$\" not found)\n", f_info.name,
-                            f_info.cur_line_number, expression);
-                else if (register_error == REG_NOTHING_AFTER_DOLLAR_SIGN)
-                    fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(no number after \"$\")\n", f_info.name,
-                            f_info.cur_line_number, expression);
-                else if (register_error == REG_NOT_NUMBER)
-                    fprintf(stderr,
-                            "%s:%ld: \"%s\" is not a valid register(what comes after \"$\" is not an integer)\n",
-                            f_info.name, f_info.cur_line_number, expression);
-                else if (register_error == REG_NOT_IN_RANGE)
-                    fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(number not between 0 and 31)\n", f_info.name,
-                            f_info.cur_line_number, expression);
-
+                if (register_error == REG_DOLLAR_SIGN_NOT_FOUND) fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(\"$\" not found)\n", f_info.name, f_info.cur_line_number, expression);
+                else if (register_error == REG_NOTHING_AFTER_DOLLAR_SIGN) fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(no number after \"$\")\n", f_info.name, f_info.cur_line_number, expression);
+                else if (register_error == REG_NOT_NUMBER) fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(what comes after \"$\" is not an integer)\n", f_info.name, f_info.cur_line_number, expression);
+                else if (register_error == REG_NOT_IN_RANGE) fprintf(stderr, "%s:%ld: \"%s\" is not a valid register(number not between 0 and 31)\n", f_info.name,f_info.cur_line_number, expression);
                 return FALSE;
             }
         } else /* we already saw 3 operands, now we are jsut counting */
@@ -995,4 +984,3 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
 
     return TRUE; /* validation succeded */
 }
-

@@ -9,7 +9,7 @@
 void to_upper_string(char *str) {
     int i = 0;
 
-	/* iterates through the given string */
+    /* iterates through the given string */
     while (!end_of_line(str, i)) {
         str[i] = toupper(str[i]); /* replace the current letter with a capital letter */
         i++;
@@ -100,50 +100,49 @@ int skip_spaces(char *str, int i){
 /* this function takes an expression and converts it to long */
 long get_num(char *expression){
     char *temp_ptr, *value_as_string;
-	long value;
-	int sign = 1, i, j;
-
-	for(i = 0; !end_of_line(expression, i) && (expression[i] == '+' || expression[i] == '-'); i++)
-		if(expression[i] == '-') sign *= -1;	
-
-	value_as_string = (char*)(malloc((strlen(expression) - i)*(sizeof(char))));
-
-	j = i;
-	for(; !end_of_line(expression, i); i++)
-		value_as_string[i - j] = expression[i];
-
-	value = strtol(value_as_string, &temp_ptr, 10);
-
-	free(value_as_string);
+    long value;
+    int sign = 1, i, j;
+    
+    for(i = 0; !end_of_line(expression, i) && (expression[i] == '+' || expression[i] == '-'); i++)
+    	if(expression[i] == '-') sign *= -1;	
+    
+    value_as_string = (char*)(malloc((strlen(expression) - i)*(sizeof(char))));
+    
+    j = i;
+    for(; !end_of_line(expression, i); i++)
+    	value_as_string[i - j] = expression[i];
+    
+    value = strtol(value_as_string, &temp_ptr, 10);
+    
+    free(value_as_string);
 
     return value * sign;
 }
 
 /* this function takes an expression return TRUE if it's an integer and FALSE otherwise */
 bool is_int(char *expression, int from){
-	for(; !end_of_line(expression, from) && (expression[from] == '+' || expression[from] == '-'); from++)
-		;
+    for(; !end_of_line(expression, from) && (expression[from] == '+' || expression[from] == '-'); from++)
+        ;
 
-    for (; !end_of_line(expression, from); from++) { /* this loop checks if all the chars in this string are digits */
-        if (!isdigit(expression[from])) {
-            return FALSE;
-        }
-    }
+    for (; !end_of_line(expression, from); from++) /* this loop checks if all the chars in this string are digits */
+        if (!isdigit(expression[from]))
+            return FALSE;        
+	    
     return from > 0; /* this means the string is empty */
 }
 
 /* this function returns the value of a given register */
 int get_register(char *register_content) {
-	int i;
+    int i;
     char reg_value[3]; /* the value of the given register, represented as a string */
 
-	for(i = 1; !end_of_line(register_content, i) && (register_content[i] == '+' || register_content[i] == '-'); i++)
-		;
-
-	reg_value[0] = register_content[i]; 
-	reg_value[1] = register_content[i+1]; 
-	reg_value[2] = '\0'; 
-	return atoi(reg_value); /* converting the string to a number and returns it */
+    for(i = 1; !end_of_line(register_content, i) && (register_content[i] == '+' || register_content[i] == '-'); i++)
+    	;
+    
+    reg_value[0] = register_content[i]; 
+    reg_value[1] = register_content[i+1]; 
+    reg_value[2] = '\0'; 
+    return atoi(reg_value); /* converting the string to a number and returns it */
 }
 
 /* the function takes an expression if return TRUE if it's a valid register and FALSE otherwise */
@@ -160,15 +159,15 @@ register_format_error is_valid_register(char *expression){
     if(!is_int(expression, 1)) /* means what comes after the dollar sign is not a number */
         return REG_NOT_NUMBER;
 
-	for(i = 1; !end_of_line(expression, i) && (expression[i] == '+' || expression[i] == '-'); i++)
-		if(expression[i] == '-') sign *= -1;	
-	if(sign == -1){
+    for(i = 1; !end_of_line(expression, i) && (expression[i] == '+' || expression[i] == '-'); i++)
+        if(expression[i] == '-') sign *= -1;	
+    if(sign == -1){
         return REG_NOT_IN_RANGE;
-	}
+    }
 
     /* reading the number from the string */
     for(; i < strlen(expression); i++){
-		/* the two lines bellow are responsible for readingthe next digit of the number */
+        /* the two lines bellow are responsible for readingthe next digit of the number */
         reg_value *= 10;
         reg_value += (expression[i] - '0');
 
@@ -194,8 +193,8 @@ int get_label(char str[], char buf[], int i){
 }
 
 /*
-	the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label
-	the function stops reading the label when it sees the given char(token)	
+    the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label
+    the function stops reading the label when it sees the given char(token)	
  */
 int get_label_until(char str[], char buf[], int i, char token){
     int j = 0;

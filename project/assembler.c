@@ -18,7 +18,7 @@ void assemble(char *file_name) {
     FILE *asm_file; /* the assembly file */
     bool is_success = TRUE; /* status that says if the line to be assembled is valid or not */
     symbol_table *sym_table = create_symbol_table() /* the symbol table */, *entry_table;
-	symbol_element *tmp; /* the entry table */
+    symbol_element *tmp; /* the entry table */
     memory_table *ic_memory_table /* the instruction memory table */, *dc_memory_table /* the data memory table */;
     extern_table *extern_list; /* the list of externals labels */
     file_info cur_file_info; /* contains information about the current file */

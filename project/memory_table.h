@@ -12,7 +12,7 @@ typedef struct memory_element {
 
 typedef struct memory_table {    
     struct memory_element *head; /* a pointer to beginning of the table */
-	struct memory_element *tail; /* a pointer to end of the table */
+    struct memory_element *tail; /* a pointer to end of the table */
 } memory_table;
 
 /* this function creates an empty memory table (contains a garbage value) */
