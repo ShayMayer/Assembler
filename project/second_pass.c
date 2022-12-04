@@ -244,7 +244,7 @@ static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, m
     free(registers);
 
     *ic += 4; /* an instruction of 4 cells */
-	return TRUE; /* assembling succeeded */
+    return TRUE; /* assembling succeeded */
 }
 
 /* this function takes i instruction(loading and saving in memory) and tries to assemble it */
