@@ -147,8 +147,7 @@ int get_register(char *register_content) {
 
 /* the function takes an expression if return TRUE if it's a valid register and FALSE otherwise */
 register_format_error is_valid_register(char *expression){
-    int i, sign = 1;
-    int reg_value = 0; /* the value of the register(what comes after the dollar sign) */
+    int i, sign = 1, int reg_value = 0; /* the value of the register(what comes after the dollar sign) */
 
     if(expression[0] != '$') /* means that the dollar sign doesn't exist */
         return REG_DOLLAR_SIGN_NOT_FOUND;
