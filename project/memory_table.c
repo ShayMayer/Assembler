@@ -46,6 +46,7 @@ void add_memory_elements(memory_table *table, int cell_amount, long value) {
 
         new_node->cell |= value; /* setting the current cell */
         value >>= 8; /* shifting 8 bits in order to set the next cell of the memory table */        
+	    
         add_single_element(table, new_node);
     }
 }
