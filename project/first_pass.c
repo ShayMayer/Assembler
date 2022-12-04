@@ -66,8 +66,7 @@ bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc)
     i = find_and_validate_label(f_info, i, label, table); /* moving the index to after the label(if we found a label) */
     if(i == -1) return FALSE; /* means we found a label but i'ts not a valid label */
 
-    if(i != 0) /* means we found a valid label */
-        label_found = TRUE;
+    if(i != 0) label_found = TRUE; /* means we found a valid label */
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
     i = get_label_until(f_info.cur_line_content, instruction, i, ','); /* getting the name of the instruction */
