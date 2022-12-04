@@ -14,7 +14,6 @@ symbol_table *create_symbol_table() {
         fprintf(stderr, "c language error: calloc failed");
         exit(1);
     }
-
     return table;
 }
 
