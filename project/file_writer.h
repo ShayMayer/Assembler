@@ -10,8 +10,8 @@
 void write_object_file(char *file_name , memory_table *ic_memory_table, memory_table *dc_memory_table, long icf, long dcf);
 
 /*
-	this function creates an empty "ob" file via the file_name parameter 
-	the content of this file is: " 0  0 ", the function is useful when we see a extreme case
+    this function creates an empty "ob" file via the file_name parameter 
+    the content of this file is: " 0  0 ", the function is useful when we see a extreme case
 */
 void write_blank_object_file(char *file_name);
 
