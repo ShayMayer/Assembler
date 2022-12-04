@@ -33,17 +33,17 @@ void add_symbol_item(symbol_table *table, char *name, long address, unsigned int
     }
     strcpy(name_temp, name);
 
-	if(table->head == NULL) {
-		table->head = (symbol_element *) calloc(1, sizeof(symbol_element));
-		table->head->name = (char *) calloc(1, sizeof(char *));
-	    table->head->name = name_temp;
-		table->head->address = address;
-		table->head->attributes |= attributes;
-
-		table->tail = table->head;
-		return;
-	}
-	new_element = (symbol_element *) calloc(1, sizeof(symbol_element));
+    if(table->head == NULL) {
+        table->head = (symbol_element *) calloc(1, sizeof(symbol_element));
+        table->head->name = (char *) calloc(1, sizeof(char *));
+        table->head->name = name_temp;
+        table->head->address = address;
+        table->head->attributes |= attributes;
+        
+        table->tail = table->head;
+        return;
+    }
+    new_element = (symbol_element *) calloc(1, sizeof(symbol_element));
 
     /* checking if the calloc function worked */
     if (new_element == NULL) {
@@ -66,7 +66,7 @@ void add_symbol_item(symbol_table *table, char *name, long address, unsigned int
     new_element->attributes |= attributes;
 
     table->tail->next = new_element;
-	table->tail = table->tail->next;
+    table->tail = table->tail->next;
 }
 
 /* this function returns TRUE if the given symbol table contains a symbol table with the same name and attributes like the parameters amd FALSE other wise */
@@ -114,7 +114,7 @@ void change_address(symbol_table *table, char *name, long address) {
 /* this function returns a new symbol table containing all the labels whcih conatin the given attributes */
 symbol_table* table_of_attributes(symbol_table *table, unsigned int attributes) {
     symbol_table *new_table = create_symbol_table(); /* the new table to return */ 
-	symbol_element *current = table->head; /* a pointer to the given table */
+    symbol_element *current = table->head; /* a pointer to the given table */
 
     /* iterating through the table and adding the elements with the corresponding attributes to the new table */
     while (current != NULL) {
@@ -152,9 +152,9 @@ void free_symbol_table(symbol_table *table) {
         free(current->name);
         free(current);
     }
-	free(table);
+    free(table);
 }
 
 bool sym_is_empty(symbol_table *table) {
-	return (table->head == NULL);
+    return (table->head == NULL);
 }
