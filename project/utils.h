@@ -58,8 +58,8 @@ bool is_int(char *expression, int form);
 int get_label(char str[], char buf[], int i);
 
 /*
-	the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label
-	the function stops reading the label when it sees the given char(token)	
+    the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label
+    the function stops reading the label when it sees the given char(token)	
  */
 int get_label_until(char str[], char buf[], int i, char token);
 
