@@ -63,55 +63,55 @@ static bool assemble_extern_instruction(file_info f_info, int i, symbol_table *s
 bool assemble_command(file_info f_info, memory_table *ic_memory_table, memory_table *dc_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic, long *dc){
     char instruction[MAX_LINE_LENGTH]; /* the instruction */
     int i = 0;
-	instruction_info *instruct_info; /* information about the instruction */
-
+    instruction_info *instruct_info; /* information about the instruction */
+    
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
     if(is_empty_line_or_comment_line(f_info.cur_line_content, i)) return TRUE; /* means the current line is empty or a comment */
-
+    
     i = skip_label(f_info); /* skipping label(if exists) */
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-	i = get_label_until(f_info.cur_line_content, instruction, i, ','); /* getting the nmae of the instruction */
-
-	/* getting info about the instruction */
-	instruct_info = get_instruction_info(instruction);
-
-	/* checking which instruction the given instruction is */	
-	switch(instruct_info->id){
-		case ADD: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case SUB: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case AND: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case OR: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case NOR: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case MOVE: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case MVHI: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case MVLO: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
-		case ADDI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case SUBI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case ANDI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case ORI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case NORI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case BNE: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic);		
-		case BEQ: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic); 
-		case BLT: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic); 
-		case BGT: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic); 
-		case LB: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case SB: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
-		case LW: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic); 
-		case SW: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic); 
-		case LH: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic); 
-		case SH: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic); 
-		case JMP: return assemble_jmp_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
-		case LA: return assemble_la_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
-		case CALL: return assemble_call_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
-		case STOP: return assemble_stop_instruction(ic_memory_table, instruct_info->opcode, ic);
-		case DB: return assemble_db_instruction(f_info, i, dc_memory_table, dc);
-		case DH: return assemble_dh_instruction(f_info, i, dc_memory_table, dc);
-		case DW: return assemble_dw_instruction(f_info, i, dc_memory_table, dc);
-		case ASCIZ: return assemble_asciz_instruction(f_info, i, dc_memory_table, dc);
-		case ENTRY: return assemble_entry_instruction(f_info, i, sym_table);
-		case EXTERN: return assemble_extern_instruction(f_info, i, sym_table);
-		default: return FALSE;
-	};    
+    i = get_label_until(f_info.cur_line_content, instruction, i, ','); /* getting the nmae of the instruction */
+    
+    /* getting info about the instruction */
+    instruct_info = get_instruction_info(instruction);
+    
+    /* checking which instruction the given instruction is */
+    switch(instruct_info->id){
+        case ADD: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case SUB: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case AND: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case OR: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case NOR: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case MOVE: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case MVHI: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case MVLO: return assemble_r_instruction_group_2(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
+        case ADDI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case SUBI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case ANDI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case ORI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case NORI: return assemble_i_instruction_group_1(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case BNE: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic);
+        case BEQ: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic);
+        case BLT: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic);
+        case BGT: return assemble_i_instruction_group_2(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, ic);
+        case LB: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case SB: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case LW: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case SW: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case LH: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case SH: return assemble_i_instruction_group_3(f_info, i, instruct_info->opcode, ic_memory_table, ic);
+        case JMP: return assemble_jmp_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
+        case LA: return assemble_la_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
+        case CALL: return assemble_call_instruction(f_info, i, instruct_info->opcode, ic_memory_table, sym_table, extern_list, ic);
+        case STOP: return assemble_stop_instruction(ic_memory_table, instruct_info->opcode, ic);
+        case DB: return assemble_db_instruction(f_info, i, dc_memory_table, dc);
+        case DH: return assemble_dh_instruction(f_info, i, dc_memory_table, dc);
+        case DW: return assemble_dw_instruction(f_info, i, dc_memory_table, dc);
+        case ASCIZ: return assemble_asciz_instruction(f_info, i, dc_memory_table, dc);
+        case ENTRY: return assemble_entry_instruction(f_info, i, sym_table);
+        case EXTERN: return assemble_extern_instruction(f_info, i, sym_table);
+        default: return FALSE;
+    };
 }
 
 /* this function takes a line and skips its label(if exists) */
