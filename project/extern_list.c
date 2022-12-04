@@ -79,7 +79,3 @@ void free_extern_table(extern_table *table) {
 bool extern_is_empty (extern_table *table) {
     return (table->head == NULL);
 }
-
-
-
-
