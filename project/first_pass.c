@@ -229,7 +229,7 @@ static int find_and_validate_label(file_info f_info, int i, char *label, symbol_
 
     /* checking if the name of the label is a keyword */
     if(get_instruction_info(label) != NULL) {
-        fprintf(stderr, "%s:%ld: the label \"%s\" can't have the same name as an instruction\n", f_info.name, f_info.cur_line_number, label);
+        fprintf(stderr, "%s:%ld: the label \"%s\" can't have an instruction name\n", f_info.name, f_info.cur_line_number, label);
         return -1;
     }
 
@@ -995,4 +995,3 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
 
     return TRUE; /* validation succeded */
 }
-
