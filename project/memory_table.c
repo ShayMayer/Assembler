@@ -18,16 +18,16 @@ memory_table *create_memory_table() {
 }
 
 static void add_single_element(memory_table *table, memory_element *new_element) {
-	if(table->head == NULL) {
-		table->head = (memory_element *) calloc(1, sizeof(memory_element)); 
-		table->tail = table->head;
-		table->tail->cell = new_element->cell;
-		/*free(new_element);*/
-		return;
-	}
-
-	table->tail->next = new_element;
-	table->tail = table->tail->next;
+    if(table->head == NULL) {
+        table->head = (memory_element *) calloc(1, sizeof(memory_element)); 
+        table->tail = table->head;
+        table->tail->cell = new_element->cell;
+        /*free(new_element);*/
+        return;
+    }
+    
+    table->tail->next = new_element;
+    table->tail = table->tail->next;
 }
 
 /* this function adds a new cell to the given memory table via given details */
@@ -41,14 +41,13 @@ void add_memory_elements(memory_table *table, int cell_amount, long value) {
 
 		/* checking if the malloc function worked */
         if (new_node == NULL) {
-	        fprintf(stderr, "c language error: malloc failed");
+            fprintf(stderr, "c language error: malloc failed");
             exit(1);
         }
 
         new_node->cell |= value; /* setting the current cell */
         value >>= 8; /* shifting 8 bits in order to set the next cell of the memory table */        
-
-		add_single_element(table, new_node);
+        add_single_element(table, new_node);
     }
 }
 
@@ -62,10 +61,9 @@ void free_memory_table(memory_table *table) {
         table->head = table->head->next; /* moving to the next element */
         free(current); /* freeing the current element */
     }
-	free(table);
+    free(table);
 }
 
-
 bool mem_is_empty(memory_table *table){
-	return (table->head == NULL);
+    return (table->head == NULL);
 }
