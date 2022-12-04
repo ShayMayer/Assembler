@@ -184,16 +184,16 @@ bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc)
 				}
 				return validate_extern_instruction(f_info, i, table);
 			default: break;
-		};     
-	}  
+        };     
+    }  
 	
-	/* the lines below finds out why the instruction isn't correct */
-	if(f_info.cur_line_content[i] == ','){
-		if(strcmp(instruction, "") == 0) fprintf(stderr, "%s:%ld: unexpected comma before instruction\n", f_info.name, f_info.cur_line_number);
-		else fprintf(stderr, "%s:%ld: \"%s\" is not a defined instruction\n", f_info.name, f_info.cur_line_number, instruction);
+    /* the lines below find out why the instruction isn't correct */
+    if(f_info.cur_line_content[i] == ','){
+	if(strcmp(instruction, "") == 0) fprintf(stderr, "%s:%ld: unexpected comma before instruction\n", f_info.name, f_info.cur_line_number);
+	    else fprintf(stderr, "%s:%ld: \"%s\" is not a defined instruction\n", f_info.name, f_info.cur_line_number, instruction);
 		return FALSE;
 	}
-
+	
     if(strcmp(instruction, "") == 0) fprintf(stderr, "%s:%ld: no instruction after label\n", f_info.name, f_info.cur_line_number);
     else fprintf(stderr, "%s:%ld: \"%s\" is not a defined instruction\n", f_info.name, f_info.cur_line_number, instruction);
 
