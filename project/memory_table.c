@@ -13,7 +13,6 @@ memory_table *create_memory_table() {
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
-
     return table;
 }
 
