@@ -189,7 +189,7 @@ bool validate_command(file_info f_info, symbol_table *table, long *ic, long *dc)
 	
     /* the lines below find out why the instruction isn't correct */
     if(f_info.cur_line_content[i] == ','){
-	if(strcmp(instruction, "") == 0) fprintf(stderr, "%s:%ld: unexpected comma before instruction\n", f_info.name, f_info.cur_line_number);
+	    if(strcmp(instruction, "") == 0) fprintf(stderr, "%s:%ld: unexpected comma before instruction\n", f_info.name, f_info.cur_line_number);
 	    else fprintf(stderr, "%s:%ld: \"%s\" is not a defined instruction\n", f_info.name, f_info.cur_line_number, instruction);
 		return FALSE;
 	}
