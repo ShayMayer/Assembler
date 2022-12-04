@@ -28,15 +28,15 @@ void add_extern_element(extern_table *table, char *name, long place) {
     }
     strcpy(name_temp, name);
 
-	if(table->head == NULL) {
-		table->head = (extern_element *) calloc(1, sizeof(extern_element));
-		table->head->name = (char *) calloc(1, sizeof(char *));
-	    table->head->name = name_temp;
-		table->head->place = place;
+    if(table->head == NULL) {
+        table->head = (extern_element *) calloc(1, sizeof(extern_element));
+        table->head->name = (char *) calloc(1, sizeof(char *));
+        table->head->name = name_temp;
+        table->head->place = place;
 
-		table->tail = table->head;
-		return;
-	}
+        table->tail = table->head;
+        return;
+    }
 
     new_element = (extern_element *) calloc(1, sizeof(extern_element));
     /* checking if the calloc function worked */
@@ -45,7 +45,7 @@ void add_extern_element(extern_table *table, char *name, long place) {
         exit(1);
     }
 
-	new_element->name = (char *) calloc(1, sizeof(char *));
+    new_element->name = (char *) calloc(1, sizeof(char *));
     /* checking if the calloc function worked */
     if (new_element->name == NULL) {
         fprintf(stderr, "c language error: calloc failed");
@@ -56,8 +56,8 @@ void add_extern_element(extern_table *table, char *name, long place) {
     new_element->name = name_temp;
     new_element->place = place;
 
-	table->tail->next = new_element;
-	table->tail = table->tail->next;
+    table->tail->next = new_element;
+    table->tail = table->tail->next;
 }
 
 /* this function takes a list of externals and frees its memory */
@@ -73,11 +73,11 @@ void free_extern_table(extern_table *table) {
         free(current->name);
         free(current);
     }
-	free(table);
+    free(table);
 }
 
 bool extern_is_empty (extern_table *table) {
-	return (table->head == NULL);
+    return (table->head == NULL);
 }
 
 
