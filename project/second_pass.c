@@ -463,7 +463,7 @@ static bool assemble_entry_instruction(file_info f_info, int i, symbol_table *sy
 }
 
 static bool assemble_extern_instruction(file_info f_info, int i, symbol_table *sym_table) {
-	char label[MAX_LINE_LENGTH];
+    char label[MAX_LINE_LENGTH];
 
     i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
     get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
