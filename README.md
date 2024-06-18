@@ -19,7 +19,7 @@ says we've reached the limit.
 The output consists of 3 files:
 1) ob file, which contains the machine code
 2) entry file, which contains all exported data
-3) exten file, which contains all imported data
+3) extern file, which contains all imported data
 
 # How thing are done
 First the user types in the names of the file he wishes to assemble.
