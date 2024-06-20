@@ -1,10 +1,10 @@
-/* this file contains functions and enums that have a lot of usage in the code  */
+/* this file contains useful functions and enums */
 #ifndef UTILS_H
 #define UTILS_H
 
 #include "globals.h"
 
-/* this enum contains types of errors about the register format, related to the first pass */
+/* enum containing all types of register errors, related to the first pass */
 typedef enum register_format_error {
     REG_DOLLAR_SIGN_NOT_FOUND = 0, /* dollar sign doesn't exist */
     REG_NOTHING_AFTER_DOLLAR_SIGN, /* there is only the dollar sign */
@@ -13,7 +13,7 @@ typedef enum register_format_error {
     REG_NONE /* the given expression is a valid register */
 } register_format_error;
 
-/* this enum contains types of errors about the label format, related to the first pass */
+/* enum containing all types of label errors, related to the first pass */
 typedef enum label_format_error {
     LBL_FIRST_CHAR_NOT_ALPHA = 0, /* the first char of the given expresion in not an alpha */
     LBL_TOO_LONG, /* the length of the label is too long */
@@ -21,49 +21,50 @@ typedef enum label_format_error {
     LBL_NONE /* the given expression is a valid label */
 } label_format_error;
 
-/* this function takes a string a replace the small letters with capital letters */
+/* takes a string and makes its letters upper */
 void to_upper_string(char *str);
 
-/* this function returns TRUE if the extension of the given char is "as" and FALSE otherwise */
+/* says whether the given file name(string) ends with the .as extension */
 bool extension_of_as(char *file_name);
 
-/* this function returns TRUE if the given line is empty or a comment(according to the task) and FALSE otherwise */
-bool is_empty_line_or_comment_line(char* line, int i);
+/* says whether the given line should be processed by the assembler */
+bool is_empty_line(char* line, int i);
 
-/* this function returns TRUE if the given index indicates on the end of the line and FALSE otherwise */
+/* says whether we've reached the end of the instruction */
 bool end_of_line(char *line, int i);
 
-/* this function takes a file name with extension and returns the clear name(without the extension) */
+/* returns the clear file name (the given file name without the extension) */
 char* get_clear_file_name(char* file_name_with_extension);
 
-/* this function takes a file name without any extension and adds to it the given extension */
+/* takes a file name and adds to it the given extension */
 char* add_extension_to_file(char* clear_file_name, char* extension);
 
-/* this function incrementing the given counter until we see a char which is not a white space */
+/* skips white spaces(increments line's index) */
 int skip_spaces(char *str, int i);
 
-/* this function takes an expression and convert it to long */
-long get_num(char *expression);
-
-/* this function returns the value of a given register */
+/* returns the int value of the given register(string) */
 int get_register(char *register_content);
 
-/* the function takes an expression if return TRUE if it's a valid register and FALSE otherwise */
-register_format_error is_valid_register(char *expression);
+/* returns the given string as long */
+long get_num(char *expression);
 
-/* this function takes an expression return TRUE if it's an integer and FALSE otherwise */
+/* says whether the given string is an integer */
 bool is_int(char *expression, int form);
 
-/* the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label */
+/* says whether the given string is a valid register */
+register_format_error is_valid_register(char *expression);
+
+/* gets the instruction's label from the given string, returns the updated index */
 int get_label(char str[], char buf[], int i);
 
 /*
-    the function takes a string, gets a label from it, and stores it in buf, and returns the index after getting the label
-    the function stops reading the label when it sees the given char(token)	
- */
+    gets the instruction's label from the given string
+    it stops reading when it encounters the given symbol
+    returns the updated index 
+*/
 int get_label_until(char str[], char buf[], int i, char token);
 
-/* the function takes an expression if return TRUE if it's a valid label and FALSE otherwise */
+/* checks whether the given string is a valid label */
 label_format_error is_valid_label(char *expression);
 
 #endif

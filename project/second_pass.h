@@ -1,4 +1,4 @@
-/* this file contains function for the second pass */
+/* this file contains functions for the second pass */
 #ifndef SECOND_PASS_H
 #define SECOND_PASS_H
 
@@ -8,7 +8,7 @@
 #include "globals.h"
 #include "extern_list.h"
 
-/* this function takes a line and tries to assemble it */
+/* takes a line and tries to assemble it */
 bool assemble_command(file_info f_info, memory_table *ic_memory_table, memory_table *dc_memory_table, symbol_table *s_table, extern_table *extern_list, long *ic, long *dc);
 
 #endif

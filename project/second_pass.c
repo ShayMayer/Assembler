@@ -1,4 +1,4 @@
-/* this file contains function for the second pass */
+/* this file contains functions for the second pass */
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,76 +6,76 @@
 #include "second_pass.h"
 #include "utils.h"
 
-/* this function takes a line and skips its label(if exists) */
+/* takes a line and skips its label(if exists) */
 static int skip_label(file_info f_info);
 
-/* this function takes r instruction(arithmetic and logic) and tries to assemble it */
+/* takes an r instruction(arithmetic and logic) and tries to assemble it */
 static bool assemble_r_instruction_group_1(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic);
-/* this function takes r instruction(copying) and tries to assemble it */
+/* takes an r instruction(copying) and tries to assemble it */
 static bool assemble_r_instruction_group_2(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic);
-/* this function takes r instruction(any, knows what the type of the instruction according to amount of args) and tries to assemble it */
+/* takes an r instruction and tries to assemble it */
 static bool assemble_r_instruction(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic, int expected_args);
-/* this function takes details about r instruction and convert it to machine code */
+/* builds an r instruction via the given details */
 static void build_r_instruction(memory_table *ic_memory_table, opcode op, int funct, int rs, int rt, int rd);
 
-/* this function takes i instruction(arithmetic and logic) and tries to assemble it */
+/* takes an i instruction(arithmetic and logic) and tries to assemble it */
 static bool assemble_i_instruction_group_1(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic);
-/* this function takes i instruction(jumping) and tries to assemble it */
+/* takes an i instruction(jumping) and tries to assemble it */
 static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, long *ic);
-/* this function takes i instruction(loading and saving in memory) and tries to assemble it */
+/* takes an i instruction(loading and saving in memory) and tries to assemble it */
 static bool assemble_i_instruction_group_3(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic);
-/* this function takes i instruction(that does not have label) and tries to assemble it */
+/* takes an i instruction(that doesn't have a label) and tries to assemble it */
 static bool assemble_i_instruction_no_label(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic);
-/* this function takes details about i instruction and convert it to machine code */
+/* builds an i instruction via the given details */
 static void build_i_instruction(memory_table *ic_memory_table, opcode op, int rs, int rt, long immed);
 
-/* this function takes jmp instruction and tries to assemble it */
+/* takes a jmp instruction and tries to assemble it */
 static bool assemble_jmp_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic);
-/* this function takes la instruction and tries to assemble it */
+/* takes a la instruction and tries to assemble it */
 static bool assemble_la_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic);
-/* this function takes call instruction and tries to assemble it */
+/* takes a call instruction and tries to assemble it */
 static bool assemble_call_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic);
-/* this function takes j instruction(that accepts label only) and tries to assemble it */
+/* takes a j instruction(that only contains one label) and tries to assemble it */
 static bool assemble_j_instruction_label_only(file_info f_info, int i, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, opcode op, long *ic);
-/* this function takes stop instruction and tries to assemble it */
+/* takes a stop instruction and tries to assemble it */
 static bool assemble_stop_instruction(memory_table *ic_memory_table, opcode op, long *ic);
-/* this function takes details about j instruction and convert it to machine code */
+/* takes details about a j instruction and converts it to machine code */
 static void build_j_instruction(memory_table *ic_memory_table, opcode op, int reg, long address);
 
-/* this function takes db instruction and tries to assemble it */
+/* takes db instruction and tries to assemble it */
 static bool assemble_db_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc);
-/* this function takes dh instruction and tries to assemble it */
+/* takes dh instruction and tries to assemble it */
 static bool assemble_dh_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc);
-/* this function takes dw instruction and tries to assemble it */
+/* takes dw instruction and tries to assemble it */
 static bool assemble_dw_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc);
-/* this function takes a num creation instruction(know what the type of the instruction according to the amount of cells it takes in memory and tries to assemble it */
+/* takes info about a data instruction and tries to assemble it */
 static bool assemble_num_creation_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc, int cells_amount);
 
 /* this function takes asciz instruction and tries to assemble it */
 static bool assemble_asciz_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc);
 
-/* this function takes entry instruction and tries to assemble it */
+/* takes an entry instruction and tries to assemble it */
 static bool assemble_entry_instruction(file_info f_info, int i, symbol_table *sym_table);
-/* this function takes extern instruction and tries to assemble it */
+/* takes an extern instruction and tries to assemble it */
 static bool assemble_extern_instruction(file_info f_info, int i, symbol_table *sym_table);
 
-/* this function takes a line and tries to assemble it */
+/* takes a line and tries to assemble it */
 bool assemble_command(file_info f_info, memory_table *ic_memory_table, memory_table *dc_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic, long *dc){
-    char instruction[MAX_LINE_LENGTH]; /* the instruction */
-    int i = 0;
+    char instruction[MAX_LINE_LENGTH];
+    int i = 0; /* current index */
     instruction_info *instruct_info; /* information about the instruction */
     
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    if(is_empty_line_or_comment_line(f_info.cur_line_content, i)) return TRUE; /* means the current line is empty or a comment */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    if(is_empty_line(f_info.cur_line_content, i)) return TRUE; /* checks whether the line should be processed */
     
-    i = skip_label(f_info); /* skipping label(if exists) */
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    i = get_label_until(f_info.cur_line_content, instruction, i, ','); /* getting the nmae of the instruction */
+    i = skip_label(f_info); /* skips the label(if exists) */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    i = get_label_until(f_info.cur_line_content, instruction, i, ','); /* gets the instruction's name */
     
-    /* getting info about the instruction */
+    /* gets info about the instruction */
     instruct_info = get_instruction_info(instruction);
     
-    /* checking which instruction the given instruction is */
+    /* checks the insruction's type */
     switch(instruct_info->id){
         case ADD: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
         case SUB: return assemble_r_instruction_group_1(f_info, i, instruct_info->opcode, instruct_info->funct, ic_memory_table, ic);
@@ -114,74 +114,74 @@ bool assemble_command(file_info f_info, memory_table *ic_memory_table, memory_ta
     };
 }
 
-/* this function takes a line and skips its label(if exists) */
+/* takes a line and skips its label(if exists) */
 static int skip_label(file_info f_info){
-    char label[MAX_LINE_LENGTH]; /* the label in the beginning of the instruction */
+    char label[MAX_LINE_LENGTH];
     int i = 0;
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    i = get_label_until(f_info.cur_line_content, label, i, ':'); /* getting all the chars until we see a ':' */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    i = get_label_until(f_info.cur_line_content, label, i, ':'); /* gets all the chars until it encounters a ':' */
 
-    if(i == strlen(f_info.cur_line_content) || f_info.cur_line_content[i] != ':') /* means that what we read is not a label */
+    /* checks whether the insruction has a label */
+    if(i == strlen(f_info.cur_line_content) || f_info.cur_line_content[i] != ':')
         return 0;
 
-    if(!is_valid_label(label)) /* means that what we read is not a label */
+    if(!is_valid_label(label)) /* checks whether the label is valid */
         return 0;
 
-    return i + 1; /* means what we read is a valid label, now we should read what comes after the label(that's why we return i+1) */
+    return i + 1; /* the label is valid, returns the index of the char that comes just after the label */
 }
 
-/* this function takes r instruction(arithmetic and logic) and tries to assemble it */
+/* takes an r instruction(arithmetic and logic) and tries to assemble it */
 static bool assemble_r_instruction_group_1(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic){
     return assemble_r_instruction(f_info, i, op, f, ic_memory_table, ic, 3); /* this instruction has 3 operands */
 }
 
-/* this function takes r instruction(copying) and tries to assemble it */
+/* takes an r instruction(copying) and tries to assemble it */
 static bool assemble_r_instruction_group_2(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic){
     return assemble_r_instruction(f_info, i, op, f, ic_memory_table, ic, 2); /* this instruction has 2 operands */
 }
 
-/* this function takes r instruction(any, knows what the type of the instruction according to amount of args) and tries to assemble it */
+/* takes an r instruction and tries to assemble it */
 static bool assemble_r_instruction(file_info f_info, int i, opcode op, funct f, memory_table *ic_memory_table, long *ic, int expected_args){
-    int *operands = (int*)malloc(sizeof(int) * expected_args); /* the operands of the instruction */
-    int args_handled = 0; /* how many operands we saw */
-    char expression[MAX_LINE_LENGTH]; /* buffer contaning operand as a string */
+    int *operands = (int*)malloc(sizeof(int) * expected_args);
+    int args_handled = 0; /* amount of operands it encountered */
+    char expression[MAX_LINE_LENGTH]; /* current operand as a string */
 
-    /* checking if the malloc function worked */
     if(operands == NULL){
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-    /* getting the operands one by one */
+    /* gets the operands one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i = get_label_until(f_info.cur_line_content, expression, i, ','); /* gets all the chars until it encounters a ',' */
 
-        operands[args_handled] = get_register(expression); /* getting the actual value from the operand represented as a string */
+        operands[args_handled] = get_register(expression); /* gets the int value of the current operand */
 
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i++; /* skipping the ',' char in order to keep getting the other operands values */
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i++; /* skips the ','(technical issue) */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
 
         args_handled++; /* just handled one operand */
     }
 
-    if(expected_args == 2) build_r_instruction(ic_memory_table, op, f, operands[0], 0, operands[1]); /* converting the r instruction(copying) to machine code */
-    else if(expected_args == 3) build_r_instruction(ic_memory_table, op, f, operands[0], operands[1], operands[2]); /* converting the r instruction(arithmetic and logic) to machine code */
+    if(expected_args == 2) build_r_instruction(ic_memory_table, op, f, operands[0], 0, operands[1]); /* converts the r instruction(copying) to machine code */
+    else if(expected_args == 3) build_r_instruction(ic_memory_table, op, f, operands[0], operands[1], operands[2]); /* converts the r instruction(arithmetic and logic) to machine code */
 
-    /* freeing allocated variables */
+    /* frees variables */
     free(operands);
 
     *ic += 4; /* an instruction of 4 cells */
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes details about r instruction and convert it to machine code */
+/* builds an r instruction via the given details */
 static void build_r_instruction(memory_table *ic_memory_table, opcode op, int funct, int rs, int rt, int rd){
     long value = 0; /* represents the instruction machine code */
 
-    /* in the lines bellow we convert the instruction to machine code(stores the machine code on a variable until final conversion) */
+    /* converts the given details to machine code */
     value |= op; 
     value = ((value << 5) | (rs & 31)); /* saving 5 LSB */
     value = ((value << 5) | (rt & 31)); /* saving 5 LSB */
@@ -189,56 +189,56 @@ static void build_r_instruction(memory_table *ic_memory_table, opcode op, int fu
     value = ((value << 5) | (funct & 31)); /* saving 5 LSB */
     value <<= 6; /* shifting 6 bits(task requirements) */
 
-    add_memory_elements(ic_memory_table, 4, value); /* converting the machine code into cells */
+    add_memory_elements(ic_memory_table, 4, value); /* converts the machine code into cells */
 }
 
-/* this function takes i instruction(arithmetic and logic) and tries to assemble it */
+/* takes an i instruction(arithmetic and logic) and tries to assemble it */
 static bool assemble_i_instruction_group_1(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic){
     return assemble_i_instruction_no_label(f_info, i, op, ic_memory_table, ic); /* i instruction(arithmetic and logic) */
 }
 
-/* this function takes i instruction(jumping) and tries to assemble it */
+/* takes an i instruction(jumping) and tries to assemble it */
 static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, long *ic){
     char label[MAX_LINE_LENGTH]; /* the label in the insruction(third operand) */
     int *registers = (int*)malloc(sizeof(int) * 2); /* the registers of the instruction */
     long immed; /* the distance between the current memory location to the label location in memory */
-    int args_handled = 0; /* how many operands we saw */
+    int args_handled = 0; /* amount of operands it encountered */
 
-    /* checking if the malloc function worked */
     if(registers == NULL){
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-    /* getting the operands one by one */
+    /* gets the operands one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i = get_label_until(f_info.cur_line_content, label, i, ','); /* getting all the chars until we see a ',' */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i = get_label_until(f_info.cur_line_content, label, i, ','); /* gets all the chars until it encounters a ',' */
 
-        if(args_handled == 2){ /* means the current operand should be a label */
-            if (!exists(sym_table, label, ANY_SYMBOL)) { /* label does not exist */
+        if(args_handled == 2){ /* checks whether the current operand is a label */
+            if (!exists(sym_table, label, ANY_SYMBOL)) { /* the label does not exist */
                 fprintf(stderr, "%s:%ld: the label \"%s\" doesn't exist\n", f_info.name, f_info.cur_line_number, label);
                 return FALSE;
             }
 
-            if(exists(sym_table, label, EXTERNAL_SYMBOL)){ /* label is external(not allowd in this instruction) */
+			/* checks whether the label is external(which is not allowd) */
+            if(exists(sym_table, label, EXTERNAL_SYMBOL)){
                 fprintf(stderr, "%s:%ld: the label \"%s\" can't be external\n", f_info.name, f_info.cur_line_number, label);
                 return FALSE;
             }
         }
 
-        if(args_handled < 2) registers[args_handled] = get_register(label); /* means the current operand is a register */
+        if(args_handled < 2) registers[args_handled] = get_register(label); /* checks whether the current operand is a register */
 
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i++; /* skipping the ',' char in order to keep getting the other operands values */
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i++; /* skips the ','(technical issue) */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
 
         args_handled++; /* just handled one operand */
     }
 
-    immed = get_address_of(sym_table, label) - *ic; /* calculating the distance between the current memory location to the label location in memory */
+    immed = get_address_of(sym_table, label) - *ic; /* calculates the distance between the current memory location to the label location in memory */
 
-    build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converting the instruction to machine code */
+    build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converts the instruction to machine code */
 
     /* freeing allocated variables */
     free(registers);
@@ -247,53 +247,52 @@ static bool assemble_i_instruction_group_2(file_info f_info, int i, opcode op, m
     return TRUE; /* assembling succeeded */
 }
 
-/* this function takes i instruction(loading and saving in memory) and tries to assemble it */
+/* takes an i instruction(loading and saving in memory) and tries to assemble it */
 static bool assemble_i_instruction_group_3(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic){
     return assemble_i_instruction_no_label(f_info, i, op, ic_memory_table, ic); /* i instruction(loading and saving in memory) */
 }
 
-/* this function takes i instruction(that does not have label) and tries to assemble it */
+/* takes an i instruction(that doesn't have a label) and tries to assemble it */
 static bool assemble_i_instruction_no_label(file_info f_info, int i, opcode op, memory_table *ic_memory_table, long *ic) {
     int *registers = (int *) malloc(sizeof(int) * 2); /* the registers of the instruction */
-    int registers_handled = 0; /* how many registers we saw */
-    int args_handled = 0; /* how many operands we saw */
-    long immed; /* the literal in the instruction(second operand) */
+    int registers_handled = 0; /* amount of registers it encountered */
+    int args_handled = 0; /* amount of operands it encountered */
+    long immed; /* the literal of the instruction(second operand) */
     char expression[MAX_LINE_LENGTH]; /* buffer contaning operand as a string */
 
-    /* checking if the malloc function worked */
     if (registers == NULL) {
         fprintf(stderr, "c language error: malloc failed");
         exit(1);
     }
 
-    /* getting the operands one by one */
+    /* gets the operands one by one */
     while (!end_of_line(f_info.cur_line_content, i)) {
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i = get_label_until(f_info.cur_line_content, expression, i, ','); /* getting all the chars until we see a ',' */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i = get_label_until(f_info.cur_line_content, expression, i, ','); /* gets all the chars until it encounters a ',' */
 
         if (args_handled == 1) immed = get_num(expression);
         else {
-            registers[registers_handled] = get_register(expression); /* getting the actual value of the string representation of the register */
+            registers[registers_handled] = get_register(expression); /* gets the int value of the current operand */
             registers_handled++; /* just handled one register */
         }
 
         args_handled++; /* just handled one operand */
 
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i++; /* getting all the chars until we see a ',' */
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i++; /* skips the ','(technical issue) */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
     }
 
-    build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converting the instruction to machine code */
+    build_i_instruction(ic_memory_table, op, registers[0], registers[1], immed); /* converts the instruction to machine code */
 
-    /* freeing allocated variables */
+    /* frees variables */
     free(registers); 
 
     *ic += 4; /* an instruction of 4 cells */
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes details about i instruction and convert it to machine code */
+/* builds an i instruction via the given details */
 static void build_i_instruction(memory_table *ic_memory_table, opcode op, int rs, int rt, long immed){
     long value = 0; /* represents the instruction machine code */
 
@@ -302,78 +301,80 @@ static void build_i_instruction(memory_table *ic_memory_table, opcode op, int rs
     value  = ((value << 5) | (rt & 31)); /* saving 5 LSB */
     value  = ((value << 16) | (immed & 65535)); /* saving 16 LSB */
 
-    add_memory_elements(ic_memory_table, 4, value); /* converting the machine code into cells */
+    add_memory_elements(ic_memory_table, 4, value); /* converts the machine code into cells */
 }
 
-/* this function takes jmp instruction and tries to assemble it */
+/* takes a jmp instruction and tries to assemble it */
 static bool assemble_jmp_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic) {
-    char label[MAX_LINE_LENGTH]; /* the label in this instruction(if exists) */
-    int reg = 0; /* says if the operand in this instruction is a register or not */
-    int address; /* the address of the label in this instruction(if exists) */
+    char label[MAX_LINE_LENGTH]; /* the instruction's label (if exists) */
+    int reg = 0; /* says whether the instruction's operand is a register */
+    int address; /* instruction's label's address */
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
     get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
 
-    if (label[0] == '$') { /* means the operand is a register */
+    if (label[0] == '$') { /* checks whether the operand is a register */
         reg = 1; /* the operand is a register */
-        address = get_register(label); /* the address set to be the value of the register */
+        address = get_register(label); /* the address is set to be the value of the register */
     }
     else {
-        if (!exists(sym_table, label, ANY_SYMBOL)) { /* means the label doesn't exist */
+        if (!exists(sym_table, label, ANY_SYMBOL)) { /* checks whether the label exists */
             fprintf(stderr, "%s:%ld: the label \"%s\" doesn't exist\n", f_info.name, f_info.cur_line_number, label);
             return FALSE;
         }
-        address = get_address_of(sym_table, label); /* getting the address of the label */
+        address = get_address_of(sym_table, label); /* gets the address of the label */
     }
 
-    if (exists(sym_table, label, EXTERNAL_SYMBOL)) /* we saw an external label, we should save this for later processing */
+    /* checks the label is external, if so then the label should be saved for later processing */
+    if (exists(sym_table, label, EXTERNAL_SYMBOL))
         add_extern_element(extern_list, label, *ic); /* saving the location */
 
-    build_j_instruction(ic_memory_table, op, reg, address); /* converting the instruction to machine code */
+    build_j_instruction(ic_memory_table, op, reg, address); /* converts the instruction to machine code */
 
     *ic += 4; /* an instruction of 4 cells */
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes la instruction and tries to assemble it */
+/* takes a la instruction and tries to assemble it */
 static bool assemble_la_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic){
     return assemble_j_instruction_label_only(f_info, i, ic_memory_table, sym_table, extern_list, op, ic); /* la instruction */
 }
 
-/* this function takes call instruction and tries to assemble it */
+/* takes a call instruction and tries to assemble it */
 static bool assemble_call_instruction(file_info f_info, int i, opcode op, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, long *ic){
     return assemble_j_instruction_label_only(f_info, i, ic_memory_table, sym_table, extern_list, op, ic); /* call instruction */
 }
 
-/* this function takes j instruction(that accepts label only) and tries to assemble it */
+/* takes a j instruction(that only contains one label) and tries to assemble it */
 static bool assemble_j_instruction_label_only(file_info f_info, int i, memory_table *ic_memory_table, symbol_table *sym_table, extern_table *extern_list, opcode op, long *ic){
-    char label[MAX_LINE_LENGTH]; /* the label in this instruction(if exists) */
+    char label[MAX_LINE_LENGTH]; /* instruction's label(if exists) */
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    get_label(f_info.cur_line_content, label, i); /* reads all the chars between i and the line's end */
 
-    if (!exists(sym_table, label, ANY_SYMBOL)) { /* means the label doesn't exist */
+    if (!exists(sym_table, label, ANY_SYMBOL)) { /* checks whether the label exists */
         fprintf(stderr, "%s:%ld: the label \"%s\" doesn't exist\n", f_info.name, f_info.cur_line_number, label);
         return FALSE;
     }
 
-    if (exists(sym_table, label, EXTERNAL_SYMBOL)) /* we saw an external label, we should save this for later processing */
+    /* checks the label is external, if so then the label should be saved for later processing */
+    if (exists(sym_table, label, EXTERNAL_SYMBOL))
         add_extern_element(extern_list, label, *ic); /* saving the location */
 
-    build_j_instruction(ic_memory_table, op, 0, get_address_of(sym_table, label)); /* converting the instruction to machine code */
+    build_j_instruction(ic_memory_table, op, 0, get_address_of(sym_table, label)); /* converts the instruction to machine code */
 
     *ic += 4; /* an instruction of 4 cells */
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes stop instruction and tries to assemble it */
+/* takes a stop instruction and tries to assemble it */
 static bool assemble_stop_instruction(memory_table *ic_memory_table, opcode op, long *ic){
     build_j_instruction(ic_memory_table, op, 0, 0);
     *ic += 4; /* an instruction of 4 cells */
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes details about j instruction and convert it to machine code */
+/* takes details about a j instruction and converts it to machine code */
 static void build_j_instruction(memory_table *ic_memory_table, opcode op, int reg, long address){
     long value = 0; /* represents the instruction machine code */
 
@@ -381,98 +382,95 @@ static void build_j_instruction(memory_table *ic_memory_table, opcode op, int re
     value  = ((value << 1) | (reg & 1)); /* saving 1 LSB */
     value  = ((value << 25) | (address & 33554431)); /* saving 25 LSB */
 
-    add_memory_elements(ic_memory_table, 4, value); /* converting the machine code into cells */
+    add_memory_elements(ic_memory_table, 4, value); /* converts the machine code into cells */
 }
 
-/* this function takes db instruction and tries to assemble it */
+/* takes db instruction and tries to assemble it */
 static bool assemble_db_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc){
     return assemble_num_creation_instruction(f_info, i, dc_memory_table, dc, 1); /* db instruction */
 }
 
-/* this function takes dh instruction and tries to assemble it */
+/* takes dh instruction and tries to assemble it */
 static bool assemble_dh_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc){
     return assemble_num_creation_instruction(f_info, i, dc_memory_table, dc, 2); /* dh instruction */
 }
 
-/* this function takes dw instruction and tries to assemble it */
+/* takes dw instruction and tries to assemble it */
 static bool assemble_dw_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc){
     return assemble_num_creation_instruction(f_info, i, dc_memory_table, dc, 4); /* dw instruction */
 }
 
-/* this function takes a num creation instruction(know what the type of the instruction according to the amount of cells it takes in memory and tries to assemble it */
+/* takes info about a data instruction and tries to assemble it */
 static bool assemble_num_creation_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc, int cells_amount){
     char num[MAX_LINE_LENGTH]; /* buffer contaning the number as a string */
 
-    /* getting the numbers one by one */
+    /* gets the numbers one by one */
     while(!end_of_line(f_info.cur_line_content, i)){
-        i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-        i = get_label_until(f_info.cur_line_content, num, i, ','); /* getting all the chars until we see a ',' */
+        i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+        i = get_label_until(f_info.cur_line_content, num, i, ','); /* gets all the chars until it encounters a ',' */
         i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
         i++;
 
-        add_memory_elements(dc_memory_table, cells_amount, get_num(num)); /* adding the number we read to the memory */
+        add_memory_elements(dc_memory_table, cells_amount, get_num(num)); /* adds the number to the memory */
 
-        *dc += cells_amount; /* the number has size of "cell_amout" cells */
+        *dc += cells_amount; /* the number's size is ("cell_amnout" cells) */
     }
 
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes asciz instruction and tries to assemble it */
+/* takes an asciz instruction and tries to assemble it */
 static bool assemble_asciz_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc){
-    int end_index = strlen(f_info.cur_line_content) - 1; /* index points to the end of the line */
+    int end_index = strlen(f_info.cur_line_content) - 1; /* end of the line */
 
-    /* decrementing the index until we see a quote */
+    /* looks for te quote sign */
     while(end_index >= 0 && isspace(f_info.cur_line_content[end_index]))
         end_index--;
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    i++; /* we saw a quote and we move on to the next char in order to read the content between the quotes */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    i++; /* skips the quote */
 
-    /* reading the content between the quotes */
+    /* reads the content between the quotes */
     for(; i < end_index; i++){
-        add_memory_elements(dc_memory_table, 1, f_info.cur_line_content[i]); /* adding the char to the memory */
+        add_memory_elements(dc_memory_table, 1, f_info.cur_line_content[i]); /* adds the char to the memory */
         *dc += 1; /* a char takes one cell in memory */
     }
-    add_memory_elements(dc_memory_table, 1, '\0'); /* string terminator */
+    add_memory_elements(dc_memory_table, 1, '\0');
     *dc += 1; /* a char takes one cell in memory */
 
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
-/* this function takes entry instruction and tries to assemble it */
+/* takes an entry instruction and tries to assemble it */
 static bool assemble_entry_instruction(file_info f_info, int i, symbol_table *sym_table){
     char label[MAX_LINE_LENGTH];
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    get_label(f_info.cur_line_content, label, i); /* reading all the chars between i and the line's end */
 
-    if(!exists(sym_table, label, ANY_SYMBOL)){ /* means the label doesn't exist */
+    if(!exists(sym_table, label, (ANY_SYMBOL & ~EXTERNAL_SYMBOL))){ /* checks whether the label was created in the file */
         fprintf(stderr, "%s:%ld: the label \"%s\" doesn't exist\n", f_info.name, f_info.cur_line_number, label);
         return FALSE;
     }
 
-    if (exists(sym_table, label, EXTERNAL_SYMBOL)) { /* means the label is external */
-        fprintf(stderr, "%s:%ld: the external label \"%s\" can't be entry\n", f_info.name, f_info.cur_line_number, label);
-        return FALSE;
-    }
+    add_attributes(sym_table, label, ENTRY_SYMBOL); /* marks the label as an entry */
 
-    add_attributes(sym_table, label, ENTRY_SYMBOL); /* means that from now on the label is entry */
-
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }
 
+/* takes an extern instruction and tries to assemble it */
 static bool assemble_extern_instruction(file_info f_info, int i, symbol_table *sym_table) {
     char label[MAX_LINE_LENGTH];
 
-    i = skip_spaces(f_info.cur_line_content, i); /* skipping white spaces */
-    get_label(f_info.cur_line_content, label, i); /* reading all the chars from i until the end of line */
+    i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
+    get_label(f_info.cur_line_content, label, i); /* reading all the chars between i and the line's end */
 
 
-    if (exists(sym_table, label, ~EXTERNAL_SYMBOL)) { /* means the label is not external(therefore created in the source file itself) */
+    /* checks the label is not external(if a label is external then it can only be external) */
+    if (exists(sym_table, label, ~EXTERNAL_SYMBOL)) {
         fprintf(stderr, "%s:%ld: the label \"%s\" was created in the current file and can't be external\n", f_info.name, f_info.cur_line_number, label);
         return FALSE;
     }
 
-    return TRUE; /* assembling succeeded */
+    return TRUE;
 }

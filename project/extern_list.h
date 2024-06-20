@@ -4,27 +4,30 @@
 
 #include "globals.h"
 
-/* this struct represents an element in the list */
+/* represents an extern_table's element */
 typedef struct extern_element{
-    char *name; /* the name of the label */
-    long place; /* the place of the label */
-    struct extern_element *next; /* a pointer to the next element in the list*/
+    char *name; /* label's name */
+    long place; /* label's place */
+    struct extern_element *next; /* a pointer to the next element */
 } extern_element;
 
+
+/* represents an extern table */
 typedef struct extern_table{
-    struct extern_element *head;
-    struct extern_element *tail;
+    struct extern_element *head; /* first element */
+    struct extern_element *tail; /* last element */
 } extern_table;
 
-/* this function creates an empty list of externals (contains a garbage value) */
+/* creates an empty list of externals (returns a dummy element) */
 extern_table *create_extern_table(void);
 
-/* this function adds a new element to a given list of externals via given details */
+/* adds a new element to the given table via the given details */
 void add_extern_element(extern_table *table, char *name, long place);
 
-/* this function takes a list of externals and frees its memory */
+/* frees the given table */
 void free_extern_table(extern_table *table);
 
+/* says whether the given table is empty */
 bool extern_is_empty(extern_table *table);
 
 #endif

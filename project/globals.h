@@ -2,20 +2,22 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#define MAX_LINE_LENGTH 80 /* maximum length of a line in an aseembly line to be allowd */
-#define IC_INIT_VALUE 100 /* the initial value of the instruction counter according to the task */
-#define MEMORY_SIZE 33554432 /* amount of cells that the computer has (according to the task) */
+#define MAX_LINE_LENGTH 80 /* line's max allowed length */
+#define IC_INIT_VALUE 100 /* instruction counter's initial value */
+#define MEMORY_SIZE 33554432 /* max memory cells amount */
+#define COMMENT_SYMBOL ';' /* comment symbol */
+#define EXTERNAL_INSTRUCTION_ADDRESS 0 /* address of external instructions */
 
-/* an enum of booleans */
+/* enum of booleans */
 typedef enum booleans {
     FALSE = 0, TRUE = 1
 } bool;
 
 /* contains information about the file */
 typedef struct file_info {
-    char *name; /* the name of the file */
-    long cur_line_number; /* the current number of the line to be read in the assembly file */
-    char *cur_line_content; /* the current line to be read in the assembly file */
+    char *name; /* file's name*/
+    long cur_line_number; /* current line to process */
+    char *cur_line_content; /* current line's content */
 } file_info;
 
 #endif

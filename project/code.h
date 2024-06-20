@@ -4,9 +4,9 @@
 
 #include "utils.h"
 
-#define INSTRUCTIONS_AMOUNT 33 /* amount of instructions the assembly language consists of */
+#define INSTRUCTIONS_AMOUNT 33 /* assembly instructions amount */
 
-/* this enum conatians ids for each instruction */
+/* enum containing all instrucions' ids */
 typedef enum instruction_id {
     ADD = 0, /* add instruction */
     SUB, /* sub instruction */
@@ -43,7 +43,7 @@ typedef enum instruction_id {
     EXTERN /* extern instruction */
 } instruction_id;
 
-/* this enum contains the opcodes of all the instrucions(according to the task) */
+/* enum containing all the opcodes belonging to the instrucions */
 typedef enum opcodes {
     ADD_OP = 0, /* add opcode */
     SUB_OP = 0, /* sub opcode */
@@ -75,7 +75,7 @@ typedef enum opcodes {
     NONE_OP = -1 /* not an opcode */
 } opcode;
 
-/* this enum contains the functs of all the instrucions(according to the task) */
+/* enum containing all the functs belonging to the instrucions */
 typedef enum funct {
     ADD_FUNCT = 1, /* add funct */
     SUB_FUNCT = 2, /* sub funct */
@@ -88,7 +88,7 @@ typedef enum funct {
     NONE_FUNCT = -1 /* not a funct */
 } funct;
 
-/* this struct represents all the necessary info about an insturction */
+/* represents all the necessary info about an insturction */
 typedef struct instruction_info {
     char *name; /* name of the instruction */
     int id; /* id of the instruction */
@@ -96,7 +96,7 @@ typedef struct instruction_info {
     int funct; /* funct of the instruction */
 } instruction_info;
 
-/* this function returns the info object which its name is identical to the given parameter */
+/* returns the instrucion_info which its name is the same as the given name */
 instruction_info *get_instruction_info(char *name);
 
 #endif

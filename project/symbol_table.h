@@ -4,7 +4,7 @@
 
 #include "globals.h"
 
-/* this enum contains types of symbols (according to the task) */
+/* enum containing all types of symbols */
 typedef enum symbol_types {
     CODE_SYMBOL = 1, /* code symbol */
     DATA_SYMBOL = 2, /* data symbol */
@@ -13,7 +13,7 @@ typedef enum symbol_types {
     ANY_SYMBOL = -1 /* the symbol doesn't matter */
 } symbol_types;
 
-/* this struct represents a symbol table element */
+/* represents a symbol table element */
 typedef struct symbol_element {
     char *name; /* the name of the symbol */
     long address; /* the address of the symbol */
@@ -21,35 +21,37 @@ typedef struct symbol_element {
     struct symbol_element *next; /* a pointer to the next element in the symbol table */
 } symbol_element;
 
+/* represents a symbol table */
 typedef struct symbol_table {
-    struct symbol_element *head;
-    struct symbol_element *tail;
+    struct symbol_element *head; /* symbol table's first element */
+    struct symbol_element *tail; /* symbol table's last element */
 } symbol_table;
 
-/* this function creates an empty symbol table (contains a garbage value) */
+/* creates an empty symbol table (returns a dummy element) */
 symbol_table *create_symbol_table(void);
 
-/* this function adds a new element to a given symbol table via given details */
+/* adds a new element to the given table via the given details */
 void add_symbol_item(symbol_table *table, char *name, long address, unsigned int attributes);
 
-/* this function returns TRUE if the given symbol table contains a symbol table with the same name and attributes like the parameters amd FALSE other wise */
+/* says whether the given table has an element with the given name and atrributes */
 bool exists(symbol_table *table, char *name, unsigned int attributes);
 
-/* this function adds attributes to an existing label via a given name */
+/* adds attributes to the element which its name is the same as the given name */
 void add_attributes(symbol_table *table, char *name, unsigned int attributes);
 
-/* this function change the address of an existing label via a given address */
+/* changes the address of the element which its name is the same as the given */
 void change_address(symbol_table *table, char *name, long address);
 
-/* this function returns a new symbol table contains all the label that have the attributes given as a parameter */
+/* returns a new symbol table containing all the elements that share the same attributes given as a parameter */
 symbol_table* table_of_attributes(symbol_table *table, unsigned int attributes);
 
-/* this function returns the address of the label that has the name of the given parameter */
+/* returns the address that belongs to the given name */
 long get_address_of(symbol_table *table, char *name);
 
-/* this function takes a symbol tables and frees its memory */
+/* frees a symbol table */
 void free_symbol_table(symbol_table *table);
 
+/* says whether the given symbol table is empty */
 bool sym_is_empty(symbol_table *table);
 
 #endif

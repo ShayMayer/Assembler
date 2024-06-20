@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "code.h"
 
+/* returns the instrucion_info which its name is the same as the given name */
 instruction_info *get_instruction_info(char *name){
     /* info about the instructions */
     static instruction_info info[INSTRUCTIONS_AMOUNT] = {
@@ -42,7 +43,7 @@ instruction_info *get_instruction_info(char *name){
     };
 
     int i;
-    for(i = 0; i < INSTRUCTIONS_AMOUNT; i++) /* looking for an instruction which its name is identical to the given parameter */
+    for(i = 0; i < INSTRUCTIONS_AMOUNT; i++) 
         if(strcmp(info[i].name, name) == 0)
             return &info[i];
     return NULL;

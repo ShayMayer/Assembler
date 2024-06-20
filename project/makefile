@@ -18,3 +18,5 @@ first_pass.o: first_pass.c first_pass.h utils.o code.o globals.h symbol_table.h 
 	gcc -c -ansi -Wall -pedantic first_pass.c -o first_pass.o
 second_pass.o: second_pass.c second_pass.h utils.h code.h memory_table.h symbol_table.h globals.h extern_list.h
 	gcc -c -ansi -Wall -pedantic second_pass.c -o second_pass.o
+clean:
+	rm -rf *.o assembler
