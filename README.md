@@ -1,5 +1,5 @@
 # Mips assembler
-Double pass assmembler for an imaginary assembly language(partial instruction set of the known mips language)
+Double pass assembler for an imaginary assembly language(partial instruction set of the known mips language)
 
 ## Brief
 This is an implementation of the mips assembler(partial instruction set).
