@@ -1,4 +1,5 @@
 # Mips Assembler
+Double pass assmembler for an imaginary assembly language(partial instruction set of the known mips language)
 
 ## Brief
 This is an implementation of the mips assembler(partial instruction set).
@@ -74,6 +75,6 @@ There are 3 output files:
 5. `first_pass` - Contains functions for the first processing of the instructions.
 6. `second_pass` - Contains functions for the second processing of the instructions.
 7. `globals.h` - Contains constants and info shared everywhere.
-8. 'symbol_table' - Contains info and functions about the symbols in the code
+8. `symbol_table` - Contains info and functions about the symbols in the code
 9. `memory_table` - Contains the memory(instruction and data as bytes).
 10. `utils` - Contains useful and general-purpose functions.
