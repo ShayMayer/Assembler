@@ -1,4 +1,6 @@
-# Brief
+# Mips Assembler
+
+## Brief
 This is an implementation of the mips assembler(partial instruction set).
 The program takes a file(or a group of files) and converts them into machine code.
 
@@ -21,7 +23,7 @@ The output consists of 3 files:
 2) entry file, which contains all exported data
 3) extern file, which contains all imported data
 
-# How thing are done
+## How thing are done
 First the user types in the names of the file he wishes to assemble.
 Then the assmble checkes whether the files are valid, in a case any of the files
 isn't valid then the assembler prints and error messgae.
@@ -63,3 +65,15 @@ There are 3 output files:
    
 3) We have the extern file, In which each line consists of the imported instruction's label name
    and the address it was used in.
+
+## source files
+1. `assembler` - Contains functions that tries to assemble every single file given as arguments via the termial.
+2. `code` - Contains functions for processing a single line in the first pass and a code line in the first pass.
+3. `extern_list` - Contains function for processing a single line in second pass and replacing symbol by it's address.
+4. `file_writer` - Contains functions for creating the output files.
+5. `first_pass` - Contains functions for the first processing of the instructions.
+6. `second_pass` - Contains functions for the second processing of the instructions.
+7. `globals.h` - Contains constants and info shared everywhere.
+8. 'symbol_table' - Contains info and functions about the symbols in the code
+9. `memory_table` - Contains the memory(instruction and data as bytes).
+10. `utils` - Contains useful and general-purpose functions.
