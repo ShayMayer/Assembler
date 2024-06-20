@@ -68,7 +68,7 @@ There are 3 output files:
    and the address it was used in.
 
 ## Source files
-1. `assembler` - Contains functions that tries to assemble every single file given as arguments via the termial.
+1. `assembler` - Contains functions that tries to assemble every single file given as arguments via the terminal.
 2. `code` - Contains functions for processing a single line in the first pass and a code line in the first pass.
 3. `extern_list` - Contains function for processing a single line in second pass and replacing symbol by it's address.
 4. `file_writer` - Contains functions for creating the output files.
