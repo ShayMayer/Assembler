@@ -1,4 +1,4 @@
-# Mips Assembler
+# Mips assembler
 Double pass assmembler for an imaginary assembly language(partial instruction set of the known mips language)
 
 ## Brief
@@ -67,7 +67,7 @@ There are 3 output files:
 3) We have the extern file, In which each line consists of the imported instruction's label name
    and the address it was used in.
 
-## source files
+## Source files
 1. `assembler` - Contains functions that tries to assemble every single file given as arguments via the termial.
 2. `code` - Contains functions for processing a single line in the first pass and a code line in the first pass.
 3. `extern_list` - Contains function for processing a single line in second pass and replacing symbol by it's address.
@@ -78,3 +78,10 @@ There are 3 output files:
 8. `symbol_table` - Contains info and functions about the symbols in the code
 9. `memory_table` - Contains the memory(instruction and data as bytes).
 10. `utils` - Contains useful and general-purpose functions.
+
+## Build
+Opening the terminal in the project files directory and writing make.
+
+## Run
+Writing `assembler file_name_1, file_name_2 ...`
+That will start the processing.
