@@ -83,5 +83,4 @@ There are 3 output files:
 Opening the terminal in the project files directory and writing make.
 
 ## Run
-Writing `assembler file_name_1, file_name_2 ...`
-That will start the processing.
+Writing `assembler file_name_1, file_name_2 ...` will start the processing.
