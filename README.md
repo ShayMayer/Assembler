@@ -29,8 +29,8 @@ First the user types in the names of the file he wishes to assemble.
 Then the assmble checkes whether the files are valid, in a case any of the files
 isn't valid then the assembler prints and error messgae.
 
-Now the assembler checks whether the current instruction(not including the comment(the '#' char is the comment symbol))
-consists of more than 80 chars, If so then it notifies the user.
+Now the assembler checks whether the current instruction consists of more than 80 chars, 
+If so then it tells the user it's not allowed.
 
 If it's all fine then the file goes through a process which is called "first pass".
 during the first pass the assembler iterates through every single line of the file and validates it.
