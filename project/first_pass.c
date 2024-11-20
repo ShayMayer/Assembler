@@ -851,8 +851,12 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
         return FALSE;
     }
     
+    /* skipping the left quote*/
+    i++;
+   
+    /* looking for more quotes */
     for(; i < end_index; i++)
-        if(f_info.cur_line_content[i] -= QUOTE_SYMBOL) {
+        if(f_info.cur_line_content[i] == QUOTE_SYMBOL) {
             fprintf(stderr, "%s:%ld: too many quotes\n", f_info.name, f_info.cur_line_number);
             return FALSE;
         }
@@ -966,7 +970,7 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
                 return FALSE;
             }
         }
-        else /* it already encountered 1 operands, now it will just keep counting */
+        else /* it already encountered 1 operand, now it will just keep counting */
             i = get_label_until(f_info.cur_line_content, expression, i, ','); /* gets all the chars until it encounters a ',' */
 
         i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
