@@ -804,7 +804,8 @@ static bool validate_num_creation_instruction(file_info f_info, int i, long *dc,
 
 /* takes an asciz instruction and validates it */
 static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
-    int end_index = strlen(f_info.cur_line_content) - 1;
+    int end_index = strlen(f_info.cur_line_content) - 1; /* end of the line */
+    int comment_index = end_index; /* acutal end of line */
 
     i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
 
@@ -814,10 +815,17 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
         return FALSE;
     }
 
+    /* looks for the comment sign */
+    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL)
+        comment_index--;
+    
+    if(comment_index >= 0) 
+        end_index = comment_index - 1;    
+        
     /* reaches the right quote */
     while(end_index >= 0){
         if(!isspace(f_info.cur_line_content[end_index])){
-            if(f_info.cur_line_content[end_index] != '\"') {
+            if(f_info.cur_line_content[end_index] != QUOTE_SYMBOL) {
                 fprintf(stderr, "%s:%ld: ending quote expected at the end\n", f_info.name, f_info.cur_line_number);
                 return FALSE;
             }
@@ -829,7 +837,7 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
     /* reaches the left quote */
     while(!end_of_line(f_info.cur_line_content, i)){
         if(!isspace(f_info.cur_line_content[i])){
-            if(f_info.cur_line_content[i] != '\"') {
+            if(f_info.cur_line_content[i] != QUOTE_SYMBOL) {
                 fprintf(stderr, "%s:%ld: opening quote expected at the start\n", f_info.name, f_info.cur_line_number);
                 return FALSE;
             }
@@ -842,6 +850,12 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
         fprintf(stderr, "%s:%ld: two quotes are expected\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
+    
+    for(; i < end_index; i++)
+        if(f_info.cur_line_content[i] -= QUOTE_SYMBOL) {
+            fprintf(stderr, "%s:%ld: too many quotes\n", f_info.name, f_info.cur_line_number);
+            return FALSE;
+        }
 
     *dc += (end_index - i);  /* updates the data counter */
 

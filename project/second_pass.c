@@ -422,8 +422,16 @@ static bool assemble_num_creation_instruction(file_info f_info, int i, memory_ta
 /* takes an asciz instruction and tries to assemble it */
 static bool assemble_asciz_instruction(file_info f_info, int i, memory_table *dc_memory_table, long *dc){
     int end_index = strlen(f_info.cur_line_content) - 1; /* end of the line */
+    int comment_index = end_index; /* acutal end of line */
 
-    /* looks for te quote sign */
+    /* looks for the comment sign */
+    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL)
+        comment_index--;
+    
+    if(comment_index >= 0) 
+        end_index = comment_index - 1;    
+        
+    /* looks for the quote sign */
     while(end_index >= 0 && isspace(f_info.cur_line_content[end_index]))
         end_index--;
 
