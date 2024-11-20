@@ -816,10 +816,10 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
     }
 
     /* looks for the comment sign */
-    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL)
+    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL && f_info.cur_line_content[comment_index] != QUOTE_SYMBOL)
         comment_index--;
     
-    if(comment_index >= 0) 
+    if(comment_index >= 0 && f_info.cur_line_content[comment_index] != QUOTE_SYMBOL) 
         end_index = comment_index - 1;    
         
     /* reaches the right quote */
@@ -846,20 +846,11 @@ static bool validate_asciz_instruction(file_info f_info, int i, long *dc){
         i++;
     }
 	
-	if(i == end_index){ /* checks whether 2 quotes were detected */
+    if(i == end_index){ /* checks whether 2 quotes were detected */
         fprintf(stderr, "%s:%ld: two quotes are expected\n", f_info.name, f_info.cur_line_number);
         return FALSE;
     }
-    
-    /* skipping the left quote*/
-    i++;
    
-    /* looking for more quotes */
-    for(; i < end_index; i++)
-        if(f_info.cur_line_content[i] == QUOTE_SYMBOL) {
-            fprintf(stderr, "%s:%ld: too many quotes\n", f_info.name, f_info.cur_line_number);
-            return FALSE;
-        }
 
     *dc += (end_index - i);  /* updates the data counter */
 
@@ -970,7 +961,7 @@ static bool validate_extern_instruction(file_info f_info, int i, symbol_table *t
                 return FALSE;
             }
         }
-        else /* it already encountered 1 operand, now it will just keep counting */
+        else /* it already encountered 1 operands, now it will just keep counting */
             i = get_label_until(f_info.cur_line_content, expression, i, ','); /* gets all the chars until it encounters a ',' */
 
         i = skip_spaces(f_info.cur_line_content, i); /* skips white spaces */
