@@ -425,10 +425,10 @@ static bool assemble_asciz_instruction(file_info f_info, int i, memory_table *dc
     int comment_index = end_index; /* acutal end of line */
 
     /* looks for the comment sign */
-    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL)
+    while(comment_index >= 0 && f_info.cur_line_content[comment_index] != COMMENT_SYMBOL && f_info.cur_line_content[comment_index] != QUOTE_SYMBOL)
         comment_index--;
     
-    if(comment_index >= 0) 
+    if(comment_index >= 0 && f_info.cur_line_content[comment_index] != QUOTE_SYMBOL) 
         end_index = comment_index - 1;    
         
     /* looks for the quote sign */
